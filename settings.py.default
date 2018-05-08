@@ -1,0 +1,66 @@
+# -*- coding: UTF-8 -*-
+
+
+import os
+import time
+import base64
+import uuid
+import urllib.parse
+from urllib.parse import urljoin
+
+setting = {}
+
+setting['debug'] = False
+setting['servers'] = 'lsdong.com/1.0.%s' % int(time.time())
+
+setting['root_path'] = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+setting['xsrf_cookies'] = True
+#setting['cookie_secret'] = base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes)
+#print(setting['cookie_secret'])
+setting['cookie_secret'] = ''
+setting['login_url'] = '/login'
+setting['template_path'] = os.path.join(setting['root_path'], 'lsdong', 'templates', '')  #os.path.join()拼接地址
+setting['static_path'] = os.path.join(setting['root_path'], 'lsdong', 'static', '')
+
+mail = {}
+
+mail['smtp_server'] = ''
+mail['password'] =''
+mail['from_addr'] = ''
+
+wechatapi = {}
+wechatapi['appid'] = ''
+wechatapi['secret'] = ''
+wechatapi['redirect_uri'] = 'http%3A%2F%2Fwww.lsdong.com%2Fwxlogin'
+wechatapi['access_token_uri'] ='%s%s%s%s%s' % ( 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=',
+								wechatapi['appid'],'&secret=',wechatapi['secret'],
+								'&code=%s&grant_type=authorization_code')
+wechatapi['access_userinfo_uri'] = 'https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s'
+
+aliyun = {}
+aliyun['ACCESS_KEY_ID'] = ""
+aliyun['ACCESS_KEY_SECRET'] = ""
+
+#encryptkey = bytes(setting['cookie_secret'][0:32], encoding='utf-8')
+#print(encryptkey)
+encryptkey = b'sfHJukzjQeaPNT/ujJ7KWpA6LHyrr0vH'
+
+userinfopath = os.path.join(setting['root_path'], 'lsdong', 'userinfofiles', '')
+usertemppath = os.path.join(setting['root_path'], 'lsdong', 'usertempfiles', '')
+userdatapath = os.path.join(setting['root_path'], 'lsdong', 'userdatafiles', '')
+downloadpath = os.path.join(setting['root_path'], 'lsdong','static', 'downloadfiles', '')
+downloadurl = '/%s/%s' % ('static', 'downloadfiles')
+#是否启用nginx作为文件上传中间服务器
+isuploadfilenginx = False
+
+alipay = {}
+alipay['debug'] = True
+alipay['appid'] = ''
+alipay['app_return_url'] = 'http://www.lsdong.com/alipayback'
+alipay['app_notify_url'] = 'http://www.lsdong.com/alipaynotify'
+alipay['app_private_key_path'] = os.path.join(setting['root_path'], 'lsdong', 'certs', 'alipayweb','rsa_private_key.pem')
+alipay['app_public_key_path'] = os.path.join(setting['root_path'], 'lsdong', 'certs', 'alipayweb','alipay_public_key.pem')
+
+sitenotify = '本系统正在紧张开发测试中，请勿使用，我们将尽快为您提供服务'
+lockfile = os.path.join(usertemppath, 'lock')
+adminids = ['']

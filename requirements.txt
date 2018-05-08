@@ -1,0 +1,9 @@
+tornado==5.0
+numba==0.37.0
+pycryptodomex==3.6.1
+hashids==1.2.0
+aliyun-python-sdk-core==2.3.5
+aliyun-python-sdk-core-v3==2.8.6
+aliyun-python-sdk-dysmsapi==1.0.0
+python-alipay-sdk==1.7.1
+oss2==2.4.0

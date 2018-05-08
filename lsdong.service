@@ -1,0 +1,23 @@
+# sudo mkdir /usr/lib/systemd/system
+# sudo cp /www/wwwroot/lsdong/lsdong.service /usr/lib/systemd/system
+# sudo systemctl enable lsdong
+# sudo systemctl start lsdong
+# sudo systemctl stop lsdong.service
+# sudo systemctl kill lsdong.service
+# sudo systemctl restart lsdong.service
+# sudo systemctl status lsdong
+[Unit]
+Description=lsdong deamon
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=www
+Group=www
+WorkingDirectory=/www/wwwroot/lsdong
+ExecStart=/usr/bin/python3 application.py --port=8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

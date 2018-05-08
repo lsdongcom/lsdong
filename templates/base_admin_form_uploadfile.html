@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zh-CN">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>老树洞-开源金融级文件加密存储平台</title>
+        <!-- Bootstrap -->
+        <link href="https://cdn.bootcss.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="https://cdn.bootcss.com/bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+        <link href="{{static_url("assets/css/styles.css")}}" rel="stylesheet" media="screen">
+        <link href="https://cdn.bootcss.com/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" media="screen">
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.bootcss.com/html5shiv/r29/html5.js"></script>
+        <![endif]-->
+        <script src="https://cdn.bootcss.com/modernizr/2.6.2/modernizr.min.js"></script>
+    </head>
+
+    <body>
+        <div class="container-fluid foot-wrap">
+            <p align="center" style="margin-top: -10px;color:red;">
+                {{ site_notify }}
+            </p>
+        </div>
+        {% block RenderBody %}{% end %}
+        <!--采用container-fluid，使得整个页尾的宽度为100%，并设置它的背景色-->
+        <footer class="container-fluid foot-wrap">
+        <!--采用container，使得页尾内容居中 -->
+            <p align="center" style="margin-top: 20px;color:#878B91;">
+                Copyright &copy;2018 老树洞
+            </p>
+        </footer>
+        <!--/.fluid-container-->
+        <script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+        <script src="https://cdn.bootcss.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+        <script src="https://cdn.bootcss.com/toastr.js/2.1.4/toastr.min.js"></script>
+        <script src="{{static_url("assets/js/browser-md5-file.js")}}"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="{{static_url("assets/js/ie10-viewport-bug-workaround.js")}}"></script>
+        <script src="{{static_url("assets/js/scripts.js")}}"></script>
+        <script>
+            toastr.options=
+            {
+                "closeButton":false,//显示关闭按钮
+                "debug":false,//启用debug
+                "positionClass":"toast-top-center",//弹出的位置
+                "showDuration":"300",//显示的时间
+                "hideDuration":"1000",//消失的时间
+                "timeOut":"3000",//停留的时间
+                "extendedTimeOut":"1000",//控制时间
+                "showEasing":"swing",//显示时的动画缓冲方式
+                "hideEasing":"linear",//消失时的动画缓冲方式
+                "showMethod":"fadeIn",//显示时的动画方式
+                "hideMethod":"fadeOut"//消失时的动画方式
+            };
+            $('#fileInput').on("change",function(event){
+                var file = $("#fileInput");
+                var size = file[0].files[0].size;
+                //限制为200M以内
+                var limit = 1024*1024*200;
+                if(size>limit){
+                    $('#divfile').show();
+                    file.focus();
+                }
+                else
+                {
+                    $('#divfile').hide();
+                    $("#filehash").val("");
+                    browserMD5File(file[0].files[0], function (err, md5) {
+                        $("#filehash").val(md5);
+                    });
+                }
+            });
+            function getFileName(obj){
+                var fileName="";
+                fileName = obj.val().split("\\").pop();
+                //fileName=fileName.substring(0, fileName.lastIndexOf("."));
+                return fileName;
+             }
+            function checkFileHash(filename,filehash){
+                var filename = getFileName($("#fileInput"));
+                var filesize = $("#fileInput")[0].files[0].size;
+                $.ajax({
+                    url: "/filehash",
+                    type: 'post',
+                    dataType:'json',//服务器返回json格式数据
+                    data:{"_xsrf":getCookie("_xsrf"),
+                          "filename": filename,
+                          "filehash": $("#filehash").val(),
+                          "t": '{{ filetype }}',
+                          "s": filesize
+                    },
+                    success: function (data) {
+                        if(data.result == "0"){
+                            uploadfile(false);
+                        }
+                        else if(data.result == "1"){
+                            uploadfile(true);
+                        }
+                        else{
+                            uploadError();
+                            toastr.warning(data.info);
+                            setTimeout("location.href='/filelist?t={{ filetype }}';", 2000);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(XMLHttpRequest.status);// 状态码
+                        console.log(XMLHttpRequest.readyState);// 状态
+                        console.log(textStatus);// 错误信息
+                    }
+                });
+                return false;
+            }
+            function startUpload() { // 开始上传时，调用该方法
+                $('#myuploader').show();
+                $('.bar').css('width', '0%');
+                $('.bar').text('正在计算文件hash值');
+                $('.bar').removeClass('danger success');
+                $('.bar').addClass('active');
+            }
+            function uploadProgress(percentage) { // 一个分片上传成功后，调用该方法
+                $('.bar').css('width', percentage * 100 - 1 + '%');
+                $('.bar').text(Math.floor(percentage * 100 - 1) + '%');
+            }
+            function uploadSuccess() { // 整个文件的所有分片都上传成功后，调用该方法
+                $('.bar').css('width', '100%');
+                $('.bar').text('100%');
+                $('.bar').addClass('success');
+                $('.bar').text('上传完成');
+            }
+            function uploadError() { // 上传过程中发生异常，调用该方法
+                $('.bar').css('width', '100%');
+                $('.bar').text('100%');
+                $('.bar').addClass('danger');
+                $('.bar').text('上传失败');
+            }
+            $('#myuploader').hide();
+
+            {% if isuploadfilenginx %}
+
+            interval = null;
+            function getURL() {
+                 /* generate random progress-id */
+                uuid = "";
+                for (i = 0; i < 32; i++) {
+                    uuid += Math.floor(Math.random() * 16).toString(16);
+                }
+
+                /* call the progress-updater every 1000ms */
+                interval = window.setInterval(
+                    function () {
+                        fetch(uuid);
+                    },
+                    1000
+                );
+
+                /* patch the form-action tag to include the progress-id */
+                return "/upload?X-Progress-ID=" + uuid;
+            }
+            function fetch(uuid) {
+                req = new XMLHttpRequest();
+                req.open("GET", "/progress", 1);
+                req.setRequestHeader("X-Progress-ID", uuid);
+                req.onreadystatechange = function () {
+                    if (req.readyState == 4) {
+                        if (req.status == 200) {
+                            /* poor-man JSON parser */
+                            var upload = eval(req.responseText);
+                            /* change the width if the inner progress-bar */
+                            if (upload.state == 'done' || upload.state == 'uploading') {
+                                var p = upload.received / upload.size;
+                                uploadProgress(p);
+                            }
+                            if (upload.state == 'done') {
+                                window.clearTimeout(interval);
+                                uploadSuccess();
+                            }
+                        }
+                    }
+                }
+                req.send(null);
+            }
+
+            function uploadfile(isneed){
+                var fd = new FormData();
+                var uploadurl = '/uploadfile';
+                if(isneed == true){
+                    fd.append("file", $('#fileInput')[0].files[0]);
+                    uploadurl = getURL();
+                }
+                fd.append("_xsrf", getCookie("_xsrf"));
+                fd.append("filename", getFileName($("#fileInput")));
+                fd.append("filehash", $("#filehash").val());
+                fd.append("t", '{{ filetype }}');
+                fd.append("s", $("#fileInput")[0].files[0].size);
+                fd.append("p", $("#inputPassword").val());
+                $.ajax({
+                    url: uploadurl,
+                    type: 'post',
+                    dataType:'json',//服务器返回json格式数据
+                    processData: false,
+                    contentType: false,
+                    data: fd,
+                    success: function (data) {
+                        if(data.result == "error"){
+                            uploadError();
+                            toastr.warning(data.info);
+                            setTimeout("location.href='/filelist?t={{ filetype }}';", 2000);
+                        }
+                        else{
+                            uploadSuccess();
+                            toastr.success('文件上传成功');
+                            setTimeout("location.href='/filelist?t={{ filetype }}';", 2000);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(XMLHttpRequest.status);// 状态码
+                        console.log(XMLHttpRequest.readyState);// 状态
+                        console.log(textStatus);// 错误信息
+                        uploadError();
+                        toastr.warning('文件上传失败,请稍候再试');
+                        setTimeout("location.href='/filelist?t={{ filetype }}';", 2000);
+                    }
+                });
+            }
+        {% else %}
+            function uploadfile(isneed){
+                var fd = new FormData();
+                if(isneed == true){
+                    fd.append("file", $('#fileInput')[0].files[0]);
+                }
+                fd.append("_xsrf", getCookie("_xsrf"));
+                fd.append("filename", getFileName($("#fileInput")));
+                fd.append("filehash", $("#filehash").val());
+                fd.append("t", '{{ filetype }}');
+                fd.append("s", $("#fileInput")[0].files[0].size);
+                fd.append("p", $("#inputPassword").val());
+                $.ajax({
+                        url: '/uploadfile',
+                        type: 'post',
+                        dataType:'json',//服务器返回json格式数据
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (data) {
+                            if(data.result == "error"){
+                                uploadError();
+                                toastr.warning(data.info);
+                                setTimeout("location.href='/filelist?t={{ filetype }}';", 2000);
+                            }
+                            else{
+                                uploadSuccess();
+                                toastr.success('文件上传成功');
+                                setTimeout("location.href='/filelist?t={{ filetype }}';", 2000);
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            console.log(XMLHttpRequest.status);// 状态码
+                            console.log(XMLHttpRequest.readyState);// 状态
+                            console.log(textStatus);// 错误信息
+                            uploadError();
+                            toastr.warning('文件上传失败,请稍候再试');
+                            setTimeout("location.href='/filelist?t={{ filetype }}';", 2000);
+                        }
+                 });
+                 return false;
+            }
+        {% end %}
+        </script>
+        {% block RenderBodyFoot %}{% end %}
+    </body>
+
+</html>

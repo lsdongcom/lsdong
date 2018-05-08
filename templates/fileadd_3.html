@@ -1,0 +1,210 @@
+{% extends 'base_admin_form_uploadfile.html'%}
+{% block RenderBody %}
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">老树洞</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+                    <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
+                    <li><a href="#">客服在线</a></li>
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user"></i> {{ username }} <i class="caret"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a tabindex="-1" href="/logout?c=1">完全退出</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="/logout">退出</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav">
+                    <li class="active">
+                        <a href="/">首页</a>
+                    </li>
+                    <li>
+                        <a href="#" >关于</a>
+                    </li>
+                    <li>
+                        <a href="#" >帮助</a>
+                    </li>
+                    <li>
+                        <a href="#" >联系我们</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            开源 <i class="caret"></i>
+
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a tabindex="-1" href="#">源代码</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">文档</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">版权</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a tabindex="-1" href="#">bug 跟踪</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">加入我们</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span3" id="sidebar">
+            <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+                <li class="active">
+                    <a >首页</a>
+                </li>
+                <li>
+                    <a href="/filedepth"><i class="icon-chevron-right"></i> 深层嵌套</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=1" {% if filetype == '1' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 邮箱校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=2" {% if filetype == '2' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 短信校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=3" {% if filetype == '3' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 密码加密</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=4" {% if filetype == '4' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 金融支付校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=5" {% if filetype == '5' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 金融支付强校验</a>
+                </li>
+            </ul>
+        </div>
+
+        <!--/span-->
+        <div class="span9" id="content">
+            <div class="row-fluid">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="breadcrumb">
+                            <i class="icon-chevron-left hide-sidebar"><a href='#' title="Hide Sidebar" rel='tooltip'>&nbsp;</a></i>
+                            <i class="icon-chevron-right show-sidebar" style="display:none;"><a href='#' title="Show Sidebar" rel='tooltip'>&nbsp;</a></i>
+                            <li>
+                                <a href="#">首页</a> <span class="divider">/</span>
+                            </li>
+                            <li>
+                                <a href="/filelist?t={{ filetype }}">{{ filetypename }}</a> <span class="divider">/</span>
+                            </li>
+                            <li class="active">添加新文件</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- block -->
+                <div class="block">
+                    <div class="navbar navbar-inner block-header">
+                        <div class="muted pull-left">{{ filetypename }}</div>
+                        <div class="pull-right"><a href="/filelist?t={{ filetype }}">返回列表</a></div>
+                    </div>
+                    <div class="block-content collapse in">
+                        <div class="span12">
+                            <form class="form-horizontal" method="POST" id="fileform" data-toggle="validator" role="form">
+                                {% module xsrf_form_html() %}
+                                <input type="hidden" id="filehash" value=""/>
+                                <fieldset>
+                                    <legend>添加新文件</legend>
+                                    <div class="control-group">
+                                          <label class="control-label">待加密文件</label>
+                                          <div class="controls form-group">
+                                              <input class="form-control input-file uniform_on" id="fileInput" type="file"  required />
+                                              <div id="divfile" style="display:none;">
+                                                  <ul class="list-unstyled">
+                                                      <li>文件大小不能超过200M</li>
+                                                  </ul>
+                                              </div>
+                                          </div>
+                                    </div>
+                                    <div class="control-group">
+  								        <label class="control-label">加密密码</label>
+  								        <div class="controls form-group">
+  									        <input type="password" data-minlength="6" class="form-control" id="inputPassword" placeholder="加密密码" data-error="请输入长度不低于6位的加密密码" required>
+                                            <div class="help-block with-errors"></div>
+  								        </div>
+  							        </div>
+                                    <div class="control-group">
+  								        <label class="control-label">确认密码</label>
+  								        <div class="controls form-group">
+  									        <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#inputPassword" data-match-error="两次密码不一致" placeholder="确认密码" required>
+                                            <div class="help-block with-errors"></div>
+  								        </div>
+  							        </div>
+                                    <div class="control-group" id="myuploader" style="display:none;">
+                                        <label class="control-label">上传进度</label>
+                                        <div class="controls form-group">
+                                            <div id="progress" class="progress" style="width:220px;">
+                                                <div class="bar active" role="progressbar" style="width:0%;"></div>
+                                            </div>
+                                            <div style="clear:both;"></div>
+                                        </div>
+  							        </div>
+                                    <div class="form-actions">
+                                          <button type="submit" id="btnsubmit" class="btn btn-primary">提交</button>
+                                          <button type="reset" class="btn">重置</button>
+                                    </div>
+                                </fieldset>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /block -->
+            </div>
+        </div>
+    </div>
+</div>
+{% end %}
+{% block RenderBodyFoot %}
+<script>
+    $('#fileform').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+         var file = $("#fileInput");
+         var size = file[0].files[0].size;
+         //限制为200M以内
+         var limit = {{ filelimit }};
+         if(size<limit){
+              var filehash = $("#filehash").val();
+              if(filehash == ""){
+                    toastr.warning('正在计算文件hash值,如果文件较大,将会占用CPU资源,请稍候再提交');
+                    return false;
+              }
+              startUpload();
+              var filename = getFileName(file);
+              checkFileHash(filename,filehash);
+              return false;
+         }else{
+              toastr.warning('文件大小不能超过200M');
+              file.focus();
+              return false;
+         }
+    });
+</script>
+{% end %}

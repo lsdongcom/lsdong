@@ -1,0 +1,176 @@
+{% extends 'base_admin.html'%}
+{% block RenderBody %}
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">老树洞</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+                    <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
+                    <li><a href="#">客服在线</a></li>
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user"></i> {{ username }} <i class="caret"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a tabindex="-1" href="/logout?c=1">完全退出</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="/logout">退出</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav">
+                    <li class="active">
+                        <a href="/">首页</a>
+                    </li>
+                    <li>
+                        <a href="#" >关于</a>
+                    </li>
+                    <li>
+                        <a href="#" >帮助</a>
+                    </li>
+                    <li>
+                        <a href="#" >联系我们</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            开源 <i class="caret"></i>
+
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a tabindex="-1" href="#">源代码</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">文档</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">版权</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a tabindex="-1" href="#">bug 跟踪</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">加入我们</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+<div class="container-fluid"  style="min-height:500px">
+    <div class="row-fluid">
+        <div class="span3" id="sidebar">
+            <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+                <li class="active">
+                    <a >首页</a>
+                </li>
+                <li>
+                    <a href="/filedepth"><i class="icon-chevron-right"></i> 深层嵌套</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=1" {% if filetype == '1' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 邮箱校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=2" {% if filetype == '2' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 短信校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=3" {% if filetype == '3' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 密码加密</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=4" {% if filetype == '4' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 金融支付校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=5" {% if filetype == '5' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 金融支付强校验</a>
+                </li>
+            </ul>
+        </div>
+
+        <!--/span-->
+        <div class="span9" id="content">
+            <div class="row-fluid">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="breadcrumb">
+                            <i class="icon-chevron-left hide-sidebar"><a href='#' title="Hide Sidebar" rel='tooltip'>&nbsp;</a></i>
+                            <i class="icon-chevron-right show-sidebar" style="display:none;"><a href='#' title="Show Sidebar" rel='tooltip'>&nbsp;</a></i>
+                            <li>
+                                <a href="#">首页</a> <span class="divider">/</span>
+                            </li>
+                            <li class="active">{{ filetypename }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- block -->
+                <div class="block">
+                    <div class="navbar navbar-inner block-header">
+                        <div class="muted pull-left">{{ filetypename }}</div>
+                        <div class="pull-right" style="transform:translateY(-7px);">
+                            <a href="/fileadd?t={{ filetype }}" class="btn btn-success">添加新文件 <i class="icon-plus icon-white"></i></a>
+                            <a href="/fileadd?t={{ filetype }}&c=1" class="btn btn-success">添加新文本 <i class="icon-plus icon-white"></i></a>
+                        </div>
+                    </div>
+                    <div class="block-content collapse in">
+                        <div class="span12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th width="30px" style="text-align:center">序号</th>
+                                        <th width="50%" style="text-align:center">文件名称</th>
+                                        <th style="text-align:center">文件大小</th>
+                                        <th width="20%" style="text-align:center">上传时间</th>
+                                        <th width="50px" style="text-align:center"></th>
+                                        <th width="50px" style="text-align:center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {%  if len(filelist)>0 %}
+                                        {%  for i in range(len(filelist)) %}
+                                            <tr>
+                                                <td style="text-align:center">{{ i }}</td>
+                                                <td style="text-align:center">{{ filelist[i][0] }}</td>
+                                                <td style="text-align:center">{{ filelist[i][2] }}</td>
+                                                 <td style="text-align:center">{{ filelist[i][7] }}</td>
+                                                <td style="text-align:center"><a href="/view?i={{ i }}&t={{ filetype }}&a=0&name={{ filelist[i][8] }}" target="_blank">查看</a></td>
+                                                <td style="text-align:center"><a href="/view?i={{ i }}&t={{ filetype }}&a=1&name={{ filelist[i][8] }}" target="_blank">删除</a></td>
+                                            </tr>
+                                        {% end %}
+                                    {%  else %}
+                                             <tr>
+                                                <td colspan="6" style="text-align:center">文件列表为空</td>
+                                            </tr>
+                                    {% end %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /block -->
+            </div>
+        </div>
+    </div>
+</div>
+{% end %}
+{% block RenderBodyFoot %}
+<script>
+    {% if message %}
+    $(document).ready(function() {
+        toastr.options.timeOut = "5000";
+        toastr.warning('{{ message }}');
+    });
+    {% end %}
+</script>
+{% end %}

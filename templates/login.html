@@ -1,0 +1,90 @@
+{% extends 'base.html'%}
+{% block RenderBody %}
+
+<div class="container">
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">老树洞</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">首页</a></li>
+                    <li><a href="#">关于</a></li>
+                    <li><a href="#">帮助</a></li>
+                    <li><a href="#">联系我们</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">开源<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">源代码</a></li>
+                            <li><a href="#">文档</a></li>
+                            <li><a href="#">版权</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">bug 跟踪</a></li>
+                            <li><a href="#">加入我们</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
+                    <li><a href="#">客服在线</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+    </nav>
+    <div id="div_broswer_warning" style="text-align:center;display:none">
+        <p align="center" style="margin-top: -10px;color:red;font-size: 26px;">
+            你正在使用的浏览器版本过低，将不能正常浏览和使用老树洞安全存储，且存在安全隐患，<br>推荐使用
+            <a target="_blank" href="https://www.microsoft.com/zh-cn/download/internet-explorer.aspx">IE10</a>
+            以上版本或
+            <a target="_blank" href="https://www.google.com/chrome/">google chrome</a>
+            最新版本。
+        </p>
+    </div>
+    <div id="login_container" style="text-align:center">
+    </div>
+    <script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+    <script>
+        var obj = new WxLogin({
+                id:"login_container",
+                appid: "{{ data['appid'] }}",
+                scope: "snsapi_login",
+                redirect_uri: "{{ data['redirect_uri'] }}",
+                state: "",
+                style: "",
+                href: ""
+            });
+    </script>
+    <!-- Main component for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <h2>老树洞-开源金融级文件加密存储平台</h2>
+        <p>
+            目前的加密存储平台，多数建立在“服务器运行环境绝对安全”这样的假设前提下，一旦服务器被攻破，所有资料信息将完全暴露于巨大风险之下。本项目的框架设计建立在“服务器存在安全漏洞但会在24小时内消除”同时
+            “客户访问环境存在一定概率的安全风险”这样的假设条件下，通过更多跨设备校验、安全耦合、区块链去中心化思想提供超高强度金融级安全存储服务……
+        </p>
+        <p>请使用手机微信扫描上面的二维码，马上体验到我们的金融级安全存储服务，如有疑问，您也可以打我们右上角的热线电话或通过在线客服，与我们联系。</p>
+        <p>
+            <a class="btn btn-lg btn-primary" href="#" role="button">了解更多安全细节 &raquo;</a>
+        </p>
+    </div>
+
+</div> <!-- /container -->
+
+{% end %}
+
+{% block RenderBodyFoot %}
+<script>
+        var abc = getBroswer();
+        if(abc.broswer.toLowerCase() == 'ie' && parseFloat(abc.version) < 10){
+            $("#div_broswer_warning").show();
+            $("#login_container").hide();
+        }
+</script>
+{% end %}

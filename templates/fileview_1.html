@@ -1,0 +1,294 @@
+{% extends 'base_admin_form.html'%}
+{% block RenderBody %}
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">老树洞</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+                    <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
+                    <li><a href="#">客服在线</a></li>
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user"></i> {{ username }} <i class="caret"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a tabindex="-1" href="/logout?c=1">完全退出</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="/logout">退出</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav">
+                    <li class="active">
+                        <a href="/">首页</a>
+                    </li>
+                    <li>
+                        <a href="#" >关于</a>
+                    </li>
+                    <li>
+                        <a href="#" >帮助</a>
+                    </li>
+                    <li>
+                        <a href="#" >联系我们</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            开源 <i class="caret"></i>
+
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a tabindex="-1" href="#">源代码</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">文档</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">版权</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a tabindex="-1" href="#">bug 跟踪</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">加入我们</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span3" id="sidebar">
+            <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+                <li class="active">
+                    <a >首页</a>
+                </li>
+                <li class="hover">
+                    <a href="/filedepth"><i class="icon-chevron-right"></i> 深层嵌套</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=1" {% if filetype == '1' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 邮箱校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=2" {% if filetype == '2' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 短信校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=3" {% if filetype == '3' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 密码加密</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=4" {% if filetype == '4' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 金融支付校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=5" {% if filetype == '5' %} style="background-color: #eeeeee;" {% end %}><i class="icon-chevron-right"></i> 金融支付强校验</a>
+                </li>
+            </ul>
+        </div>
+
+        <!--/span-->
+        <div class="span9" id="content">
+            <div class="row-fluid">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="breadcrumb">
+                            <i class="icon-chevron-left hide-sidebar"><a href='#' title="Hide Sidebar" rel='tooltip'>&nbsp;</a></i>
+                            <i class="icon-chevron-right show-sidebar" style="display:none;"><a href='#' title="Show Sidebar" rel='tooltip'>&nbsp;</a></i>
+                            <li>
+                                <a href="#">首页</a> <span class="divider">/</span>
+                            </li>
+                            <li>
+                                <a href="/filelist?t={{ filetype }}">{{ filetypename }}</a> <span class="divider">/</span>
+                            </li>
+                            <li class="active"> {{ filename }} </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- block -->
+                <div class="block">
+                    <div class="block-content collapse in">
+                        <div class="span12">
+                            <form class="form-horizontal" method="POST" id="fileform" data-toggle="validator" role="form">
+                                {% module xsrf_form_html() %}
+                                <fieldset>
+                                    <legend> {{ filename }} </legend>
+                                    <div class="control-group">
+  								        <label class="control-label">邮箱地址</label>
+  								        <div class="controls form-group">
+  									        <input type="email" class="form-control span6 m-wrap" id="inputPassword" pattern="^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$" placeholder="邮箱地址" data-error="邮箱地址错误"  required />
+                                            <a id="btnMail"  class="btn a_post">发送邮件</a>
+                                            <div class="help-block with-errors"></div>
+  								        </div>
+  							        </div>
+                                    <div class="control-group">
+  								        <label class="control-label">邮箱校验码</label>
+  								        <div class="controls form-group">
+  									        <input disabled="disabled" id="emailcode" type="text" class="form-control span6 m-wrap" data-minlength="6" maxlength="6" placeholder="邮箱校验码" data-error="请输入6位校验码"  required/>
+                                            <div class="help-block with-errors"></div>
+  								        </div>
+  							        </div>
+                                    <div class="form-actions">
+                                          <button type="submit" id="btnsubmit" class="btn btn-primary">提交</button>
+                                          <button type="reset" class="btn">重置</button>
+                                    </div>
+                                </fieldset>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /block -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% end %}
+{% block RenderBodyFoot %}
+<link href="{{static_url("assets/vendors/wysiwyg/bootstrap-wysihtml5.css")}}" rel="stylesheet" media="screen">
+<script src="{{static_url("assets/vendors/wysiwyg/wysihtml5-0.3.0.js")}}"></script>
+<script src="{{static_url("assets/vendors/wysiwyg/bootstrap-wysihtml5.js")}}"></script>
+<script src="{{static_url("assets/js/password.js")}}"></script>
+<script>
+    toastr.options=
+    {
+        "closeButton":false,//显示关闭按钮
+        "debug":false,//启用debug
+        "positionClass":"toast-top-center",//弹出的位置
+        "showDuration":"300",//显示的时间
+        "hideDuration":"1000",//消失的时间
+        "timeOut":"3000",//停留的时间
+        "extendedTimeOut":"1000",//控制时间
+        "showEasing":"swing",//显示时的动画缓冲方式
+        "hideEasing":"linear",//消失时的动画缓冲方式
+        "showMethod":"fadeIn",//显示时的动画方式
+        "hideMethod":"fadeOut"//消失时的动画方式
+    };
+    var count = 60;
+    $(".a_post").on("click",function(event){
+        event.preventDefault();//使a自带的方法失效，即无法调整到href中的URL
+        if (count < 60) {
+            return false;
+        }
+        if($("#inputPassword").val()=="")
+        {
+            toastr.warning('邮箱不能为空');
+            return false;
+        }
+        var email=$("#inputPassword").val();
+        if(!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/))
+        {
+            toastr.warning('邮箱格式不正确！请重新输入');
+            $("#inputPassword").focus();
+            return false;
+        }
+        $.ajax({
+               url: "/mail",
+               type: 'post',
+               dataType:'json',//服务器返回json格式数据
+               data:{"_xsrf":getCookie("_xsrf"),
+                     "mail":$("#inputPassword").val()
+               },
+               success: function (data) {
+                     if(data.result == "error"){
+                            toastr.options.timeOut = "5000";
+                            toastr.warning(data.info);
+                            return false;
+                     }
+                     toastr.success('包含六位校验码的邮件已发送，请注意查收');
+                     $('#emailcode').removeAttr("disabled");
+                     var countdown = setInterval(CountDown, 1000);
+                     function CountDown() {
+                        count--;
+                        $("#btnMail").text("等待" + count + "秒");
+                        if (count == 0) {
+                              clearInterval(countdown);
+                              count = 60
+                              $("#btnMail").text("重新获取校验码");
+                        }
+                     }
+               },
+               error: function (XMLHttpRequest, textStatus, errorThrown) {
+                      console.log(XMLHttpRequest.status);// 状态码
+                      console.log(XMLHttpRequest.readyState);// 状态
+                      console.log(textStatus);// 错误信息
+               }
+        });
+    });
+    $('#btnsubmit').on("click",function(event){
+         $.ajax({
+              url: "/codecheck",
+              data:{"_xsrf":getCookie("_xsrf"),
+                    "t":'0',
+                    "c":$("#emailcode").val()
+              },
+              dataType:'json',//服务器返回json格式数据
+              type:'post',//HTTP请求类型
+              timeout:10000,//超时时间设置为10秒；
+              success:function(data){//服务器返回响应，根据响应结果，分析是否登录成功；
+                   if(data.result == "error"){
+                        toastr.warning(data.info);
+                        return false;
+                   }else{
+                         filedown();
+                   }
+              },
+              error: function (XMLHttpRequest, textStatus, errorThrown) {
+                      console.log(XMLHttpRequest.status);// 状态码
+                      console.log(XMLHttpRequest.readyState);// 状态
+                      console.log(textStatus);// 错误信息
+               }
+         });
+         return false;
+    });
+    function filedown(){
+        $.ajax({
+            url: "/down",
+            data:{"_xsrf":getCookie("_xsrf"),
+                  "i":'{{ fileindex }}',
+                  "t":'{{ filetype }}',
+                  "a":'{{ actiontype }}',
+                  "p":$("#inputPassword").val()
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'post',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){//服务器返回响应，根据响应结果，分析是否登录成功；
+                if(data.result == "error"){
+                    toastr.warning('邮箱地址验证失败');
+                    return false;
+                }else{
+                    if(data.result == "ok"){
+                        toastr.success('文件删除成功');
+                        setTimeout("location.href='/filelist?t={{ filetype }}';", 1000);
+                        return false;
+                    }else{
+                        toastr.success('验证成功');
+                        setTimeout("location.href='"+data.result+"';", 1000);
+                        return false;
+                    }
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                      console.log(XMLHttpRequest.status);// 状态码
+                      console.log(XMLHttpRequest.readyState);// 状态
+                      console.log(textStatus);// 错误信息
+            }
+        });
+        return false;
+    }
+</script>
+{% end %}

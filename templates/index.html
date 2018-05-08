@@ -1,0 +1,178 @@
+{% extends 'base_admin.html'%}
+{% block RenderBody %}
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">老树洞</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+                    <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
+                    <li><a href="#">客服在线</a></li>
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user"></i> {{ username }} <i class="caret"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a tabindex="-1" href="/logout?c=1">完全退出</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="/logout">退出</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav">
+                    <li class="active">
+                        <a href="/">首页</a>
+                    </li>
+                    <li>
+                        <a href="#" >关于</a>
+                    </li>
+                    <li>
+                        <a href="#" >帮助</a>
+                    </li>
+                    <li>
+                        <a href="#" >联系我们</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            开源 <i class="caret"></i>
+
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a tabindex="-1" href="#">源代码</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">文档</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">版权</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a tabindex="-1" href="#">bug 跟踪</a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="#">加入我们</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span3" id="sidebar">
+            <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+                <li class="active">
+                    <a >首页</a>
+                </li>
+                <li>
+                    <a href="/filedepth"><i class="icon-chevron-right"></i> 深层嵌套</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=1"><i class="icon-chevron-right"></i> 邮箱校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=2"><i class="icon-chevron-right"></i> 短信校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=3"><i class="icon-chevron-right"></i> 密码加密</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=4"><i class="icon-chevron-right"></i> 金融支付校验</a>
+                </li>
+                <li>
+                    <a href="/filelist?t=5"><i class="icon-chevron-right"></i> 金融支付强校验</a>
+                </li>
+            </ul>
+        </div>
+
+        <!--/span-->
+        <div class="span9" id="content">
+            <div class="row-fluid">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="breadcrumb">
+                            <i class="icon-chevron-left hide-sidebar"><a href='#' title="Hide Sidebar" rel='tooltip'>&nbsp;</a></i>
+                            <i class="icon-chevron-right show-sidebar" style="display:none;"><a href='#' title="Show Sidebar" rel='tooltip'>&nbsp;</a></i>
+                            <li class="active">首页</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- block -->
+                <div class="block">
+                    <div class="navbar navbar-inner block-header">
+                        <div class="muted pull-left">加密方式介绍</div>
+                    </div>
+                    <div class="block-content collapse in">
+                        <div class="span12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th width="30px" style="text-align:center">序号</th>
+                                        <th width="100px" style="text-align:center">名称</th>
+                                        <th>介绍</th>
+                                        <th width="50px" style="text-align:center">安全性</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align:center">0</td>
+                                        <td style="text-align:center">深层嵌套</td>
+                                        <td>本系统文件结构为文件夹嵌套模式，每层文件夹均提供下面5种加密方式，同时支持嵌套文件夹密码加密，这种嵌套文件夹密码加密方式，我们称为深层嵌套</td>
+                                        <td style="text-align:center">中</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center">1</td>
+                                        <td style="text-align:center">邮箱校验</td>
+                                        <td>以邮箱地址作为加密字符串，解密时会随机生成校验码并邮件发送到邮箱进行合法性校验</td>
+                                        <td style="text-align:center">低</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center">2</td>
+                                        <td style="text-align:center">短信校验</td>
+                                        <td>以手机号码作为加密字符串，解密时会随机生成校验码并短信发送到手机进行合法性校验</td>
+                                        <td style="text-align:center">低</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center">3</td>
+                                        <td style="text-align:center">密码加密</td>
+                                        <td>以不超过32位长度的字符串作为加密字符串</td>
+                                        <td style="text-align:center">中</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center">4</td>
+                                        <td style="text-align:center">金融支付校验</td>
+                                        <td>以不超过32位长度的包含非零数字的字符串作为加密字符串，同时提取密码中包含的数字前三位，从低位向高位填充，以最高9.99元为限额作为付款金额，解密时进行合法性校验，校验成功的付款金额自动全款退还至付款账号，校验失败的付款金额扣除20%手续费后退款</td>
+                                        <td style="text-align:center">强</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center">5</td>
+                                        <td style="text-align:center">金融支付强校验</td>
+                                        <td>以不超过32位长度的包含非零数字的字符串作为加密字符串，同时提取密码中包含的数字前五位，从低位向高位填充，以最高999.99元为限额作为付款金额，解密时进行合法性校验，校验成功的付款金额自动全款退还至付款账号，校验失败的付款金额扣除20%手续费后退款</td>
+                                        <td style="text-align:center">超强</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /block -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% end %}

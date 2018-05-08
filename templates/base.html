@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>老树洞-开源金融级文件加密存储平台</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{{static_url("assets/css/ie10-viewport-bug-workaround.css")}}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{static_url("assets/css/navbar.css")}}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container-fluid foot-wrap">
+         <p align="center" style="margin-top: -10px;color:red;">
+            {{ site_notify }}
+        </p>
+    </div>
+    {% block RenderBody %}{% end %}
+    <!--采用container-fluid，使得整个页尾的宽度为100%，并设置它的背景色-->
+    <footer class="container-fluid foot-wrap">
+    <!--采用container，使得页尾内容居中 -->
+        <p align="center" style="margin-top: 20px;color:#878B91;">
+            Copyright &copy;2018 老树洞
+        </p>
+        <p align="center" style="margin-top: 20px;color:#878B91;">
+            <a href="http://www.miibeian.gov.cn/" target="blank" title="网站备案">沪ICP备14050981号-4</a>
+        </p>
+    </footer>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{{static_url("assets/js/ie10-viewport-bug-workaround.js")}}"></script>
+    <script src="{{static_url("assets/js/scripts.js")}}"></script>
+    {% block RenderBodyFoot %}{% end %}
+  </body>
+</html>
