@@ -5,19 +5,21 @@ import json
 import tornado
 from base import BaseHandler
 import shutil
-import uuid
 from datetime import datetime, timedelta
-from safeutils import crypto_helper
-from model.userinfo import userinfo
 from model.userfile import userfile
-from utils.file_helper import getfiletypename
-from settings import userdatapath, downloadpath, downloadurl
-from urllib.parse import urljoin
+from settings import oss,filetypelimit,filesizelimit,isuploadfileoss,userdatapath, downloadpath, downloadurl
+from utils.oss_helper import alioss
 
 sys.path.append('..')
 
 
 class FileHashHandler(BaseHandler):
+
+    access_key_id = oss['AccessKeyId']
+    access_key_secret = oss['AccessKeySecret']
+    bucket_name = oss['bucket']
+    endpoint = oss['endpoint']
+    uploaddir = oss['usertemppath']
 
     @tornado.web.authenticated
     def post(self):
@@ -39,27 +41,55 @@ class FileHashHandler(BaseHandler):
                 self.write(json.dumps(ret))
                 return
 
-        now = datetime.now()
-        nowdir = now.strftime('%Y%m%d')
-        downpath = os.path.join(downloadpath, nowdir, filehash, filename)
-        if (os.path.exists(downpath)):
-            ret = {'result': '0'}
-            self.write(json.dumps(ret))
+        if (isuploadfileoss):
+            filepath = '%s/%s/%s' % (self.uploaddir, filehash, filename)
+            field_dict = {}
+
+            oss = alioss()
+            if (oss.exists(filepath) is False):
+                field_dict['isneed'] = True
+            else:
+                field_dict['isneed'] = False
+
+            # object名称
+            field_dict['key'] = filepath
+            # access key id
+            field_dict['OSSAccessKeyId'] = self.access_key_id
+            # Policy包括超时时间(单位秒)和限制条件condition
+            field_dict['policy'] = oss.build_encode_policy(120, [['eq', '$bucket', self.bucket_name],
+                                                                 ['content-length-range', 0, filesizelimit]])
+            # 请求签名
+            field_dict['signature'] = oss.build_signature(self.access_key_secret, field_dict['policy'])
+            # callback，没有回调需求不填该域
+            field_dict['callback'] = oss.bulid_callback('http://oss-demo.aliyuncs.com:23450',
+                                                        'filename=${object}&size=${size}&mimeType=${mimeType}',
+                                                        'application/x-www-form-urlencoded')
+
+            field_dict['url'] = oss.build_post_url(self.endpoint, self.bucket_name)
+            field_dict['filetypelimit'] = filetypelimit
+            field_dict['filesizelimit'] = filesizelimit
+            self.write(json.dumps(field_dict))
             return
         else:
-            beforetime = now - timedelta(days=1)
-            beforetimedir = beforetime.strftime('%Y%m%d')
-            beforetimedownpath = os.path.join(downloadpath, beforetimedir, filehash, filename)
-            if(os.path.exists(beforetimedownpath)):
-                if (not os.path.exists(os.path.join(downloadpath, nowdir, filehash))):
-                    os.makedirs(os.path.join(downloadpath, nowdir, filehash))
-                shutil.move(beforetimedownpath, downpath)
+            now = datetime.now()
+            nowdir = now.strftime('%Y%m%d')
+            downpath = os.path.join(downloadpath, nowdir, filehash, filename)
+            if (os.path.exists(downpath)):
                 ret = {'result': '0'}
                 self.write(json.dumps(ret))
                 return
             else:
-                ret = {'result': '1'}
-                self.write(json.dumps(ret))
-                return
-
-
+                beforetime = now - timedelta(days=1)
+                beforetimedir = beforetime.strftime('%Y%m%d')
+                beforetimedownpath = os.path.join(downloadpath, beforetimedir, filehash, filename)
+                if (os.path.exists(beforetimedownpath)):
+                    if (not os.path.exists(os.path.join(downloadpath, nowdir, filehash))):
+                        os.makedirs(os.path.join(downloadpath, nowdir, filehash))
+                    shutil.move(beforetimedownpath, downpath)
+                    ret = {'result': '0'}
+                    self.write(json.dumps(ret))
+                    return
+                else:
+                    ret = {'result': '1'}
+                    self.write(json.dumps(ret))
+                    return

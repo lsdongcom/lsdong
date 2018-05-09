@@ -13,7 +13,7 @@ from safeutils import crypto_helper
 from model.userinfo import userinfo
 from model.userfile import userfile
 from utils.file_helper import getfiletypename,lock_site_notify,checkfilename
-from settings import isuploadfilenginx,filelimit
+from settings import isuploadfilenginx,filesizelimit
 sys.path.append('..')
 
 class FileAddHandler(BaseHandler):
@@ -35,7 +35,7 @@ class FileAddHandler(BaseHandler):
                             filetypename=filetypename, site_notify=site_notify)
             else:
                 self.render('fileadd_' + filetype + '.html', username=user.nickname, filetype=filetype, filetypename=filetypename,
-                            isuploadfilenginx=isuploadfilenginx, filelimit=filelimit, site_notify=site_notify)
+                            isuploadfilenginx=isuploadfilenginx, filesizelimit=filesizelimit, site_notify=site_notify)
 
     @tornado.web.authenticated
     def post(self):

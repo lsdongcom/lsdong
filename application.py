@@ -1,14 +1,14 @@
 # -*- coding: UTF-8 -*-
 
 import os
-
+import shutil
 import tornado.ioloop
 import tornado.web
 from tornado.options import define, options
 import logging
 
 from urls import url
-from settings import setting
+from settings import setting,isuploadfileoss
 
 # logging.basicConfig(level=logging.DEBUG,
 # 					filemode='a+',
@@ -23,6 +23,7 @@ define("port", default=8000, type=int, help="the listen port")
 
 
 def main():
+	updatetemplate()
 	options.parse_command_line()
 	logging.info('The template path:{0}'.format(setting['template_path']))
 	logging.info('The static path:{0}'.format(setting['static_path']))
@@ -30,6 +31,16 @@ def main():
 	print("you can stop the programming by 'ctrl+c'")
 	application.listen(options.port)
 	tornado.ioloop.IOLoop.current().start()
+
+#根据文件上传类型动态切换模板
+def updatetemplate():
+	basefile = os.path.join(setting['template_path'], 'base_admin_form_uploadfile.html')
+	if(os.path.exists(basefile)):
+		os.unlink(basefile)
+	if(isuploadfileoss):
+		shutil.copy(os.path.join(setting['template_path'], 'uploadfile_base', 'base_admin_form_uploadfile_oss.html'),basefile)
+	else:
+		shutil.copy(os.path.join(setting['template_path'], 'uploadfile_base', 'base_admin_form_uploadfile.html'),basefile)
 
 if __name__ == "__main__":
 	main()

@@ -134,6 +134,7 @@
                                           <label class="control-label">待加密文件</label>
                                           <div class="controls form-group">
                                               <input class="form-control input-file uniform_on" id="fileInput" type="file"  required />
+                                              <a id="btn_plupload" style="display:none">plupload控件上传按钮,不使用，但删除后控件无法初始化</a>
                                               <div id="divfile" style="display:none;">
                                                   <ul class="list-unstyled">
                                                       <li>文件大小不能超过200M</li>
@@ -242,7 +243,7 @@
          var file = $("#fileInput");
          var size = file[0].files[0].size;
          //限制为200M以内
-         var limit = {{ filelimit }};
+         var limit = {{ filesizelimit }};
          if(size<limit){
               $.ajax({
                     url: "/codecheck",
