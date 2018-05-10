@@ -1,19 +1,15 @@
 # -*- coding: UTF-8 -*-
 
-import os,os.path,sys
+import os,os.path,sys,shutil
 import json
 import tornado
 from base import BaseHandler
-from settings import usertemppath,userdatapath,downloadpath
-import uuid
-import shutil
-from datetime import datetime,timedelta
+from datetime import datetime
 from safeutils import crypto_helper
-from model.userinfo import userinfo
 from model.userfile import userfile
-from utils.file_helper import getfiletypename,lock_site_notify
-from settings import oss,filetypelimit,filesizelimit,isuploadfileoss,userdatapath, downloadpath, downloadurl
-from utils.oss_helper import alioss
+from utils.file_helper import lock_site_notify
+from settings import alioss,userdatapath, downloadpath
+from utils.oss_helper import Alioss
 
 sys.path.append('..')
 
@@ -64,37 +60,34 @@ class Upload_OSS_Handler(BaseHandler):
         passhash = crypto_helper.get_key(password, user.id, filehash, None, False)
         finalname = filedata.add_file(filename, filetype, filesize, filehash, passhash)
         password = crypto_helper.get_key(password, user.id)
-        encrpath = os.path.join(userdatapath, finalname)
 
-        if (isuploadfileoss):
-            ret = {'result': 'ok'}
+        oss = Alioss()
+        now = datetime.now()
+        nowdir = now.strftime('%Y%m%d')
+        ossdownpath = '%s/%s/%s/%s' % (alioss['downloadpath'], nowdir, filehash, filename)
+        localdownpath = os.path.join(downloadpath, nowdir, filehash, filename)
+        ossencrpath = '%s/%s' % (alioss['userdatapath'], finalname)
+        localencrpath = os.path.join(userdatapath, finalname)
+        if (oss.exists(ossdownpath) is False):
+            filedata.del_file(finalname)
+            ret = {'result': 'error'}
+            ret['info'] = '文件上传失败';
             self.write(json.dumps(ret))
+            return
         else:
-            now = datetime.now()
-            nowdir = now.strftime('%Y%m%d')
-            downpath = os.path.join(downloadpath, nowdir, filehash, filename)
-            if (not os.path.exists(os.path.join(downloadpath, nowdir, filehash))):
+            if (os.path.exists(os.path.join(downloadpath, nowdir, filehash)) is False):
                 os.makedirs(os.path.join(downloadpath, nowdir, filehash))
-            file_metas = self.request.files.get('file', None)  # 提取表单中‘name’为‘file’的文件元数据
-            if file_metas:
-                temp_file = os.path.join(usertemppath, finalname)
-                with open(temp_file, 'wb') as up:
-                    up.write(file_metas[0]['body'])
+            if(os.path.exists(localdownpath) is False):
+                oss.Bucket.get_object_to_file(ossdownpath, localdownpath)
 
-                temp_file = os.path.join(usertemppath, finalname)
-                if (not os.path.exists(downpath)):
-                    shutil.move(temp_file, downpath)
-                else:
-                    os.unlink(temp_file)
-
-            if (os.path.exists(encrpath)):
-                os.unlink(encrpath)
-
-            crypto_helper.encrypt_file(bytes.fromhex(password), downpath, encrpath)
-
-            if (not user.isexist):
+            # 此处下载到本地进行解码的文件处理完后多长时间删除的逻辑处理需要更多的思考，目前采取48小时删除方式清理磁盘，systask定时任务每天定时执行
+            # 下载的逻辑处理与此处相同
+            crypto_helper.encrypt_file(bytes.fromhex(password), localdownpath, localencrpath)
+            oss.Bucket.put_object_from_file(ossencrpath, localencrpath)
+            if (os.path.exists(localencrpath) is True):
+                os.unlink(localencrpath)
+            if (user.isexist is False):
                 user.set_isexist(True)
                 self.set_current_user(user.get_session())
-
             ret = {'result': 'ok'}
             self.write(json.dumps(ret))

@@ -1,12 +1,16 @@
 # -*- coding: UTF-8 -*-
 
-import sys
+import os, sys
 from base import BaseHandler
 from settings import wechatapi
 import requests
 from safeutils.hashids_helper import *
 from model.userinfo import userinfo
 from safeutils import crypto_helper
+import json
+from settings import alioss,userinfopath,isuploadfileoss
+from utils.oss_helper import Alioss
+from utils.file_helper import file_exists,file_read,file_write
 sys.path.append('..')
 
 class WXLoginHandler(BaseHandler):
@@ -29,7 +33,7 @@ class WXLoginHandler(BaseHandler):
 
         unionid = clear_unionid(unionid)
         idx = self.get_id(unionid)
-        idx, isexist = crypto_helper.check_idx(unionid, idx, self.usertype)
+        idx, isexist = self.check_idx(unionid, idx, self.usertype)
         user = userinfo(idx, unionid, nickname, self.usertype, isexist)
         self.set_current_user(user.get_session())
         self.redirect('/')
@@ -39,6 +43,40 @@ class WXLoginHandler(BaseHandler):
         hashid = get_hashid(sid, skey)
         idx = '%s%s' % (get_key(unionid, hashid, self.usertype), sid)
         return idx
+
+    def check_idx(self,unionid, idx, usertype):
+        oss = Alioss()
+        if (isuploadfileoss is True):
+            userdir = '%s/%s' % (alioss['userinfopath'], usertype)
+            filepath = '%s/%s' % (userdir, idx)
+        else:
+            userdir = os.path.join(userinfopath, usertype)
+            filepath = os.path.join(userdir, idx)
+
+        if file_exists(filepath, oss) is False:
+            return idx, False
+        b_unionid = bytes(unionid, encoding='utf-8')
+        filedata = file_read(filepath, oss)
+        filedata = json.loads(filedata)
+        filedata = crypto_helper.aes_decrypt(filedata, b_unionid)
+        if (filedata['userid'] == unionid):
+            return idx, True
+
+        for i in range(9):
+            newidx = '%s%s' % (idx, str(i))
+            if (isuploadfileoss is True):
+                newfilepath = '%s%s' % (userdir, newidx)
+            else:
+                newfilepath = os.path.join(userdir, newidx)
+            if file_exists(newfilepath) is False:
+                return newidx, False
+            filedata = file_read(filepath, oss)
+            filedata = json.loads(filedata)
+            filedata = crypto_helper.aes_decrypt(filedata, b_unionid)
+            if (filedata['userid'] == unionid):
+                return idx, True
+        print('%s userinfo idx:%s error. please check', usertype, idx)
+        return '', False
 
     def get_access_token(self,code):
         wechat_request = wechatapi['access_token_uri'] % (code)

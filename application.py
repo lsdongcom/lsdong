@@ -35,9 +35,9 @@ def main():
 #根据文件上传类型动态切换模板
 def updatetemplate():
 	basefile = os.path.join(setting['template_path'], 'base_admin_form_uploadfile.html')
-	if(os.path.exists(basefile)):
+	if(os.path.exists(basefile) is True):
 		os.unlink(basefile)
-	if(isuploadfileoss):
+	if(isuploadfileoss is True):
 		shutil.copy(os.path.join(setting['template_path'], 'uploadfile_base', 'base_admin_form_uploadfile_oss.html'),basefile)
 	else:
 		shutil.copy(os.path.join(setting['template_path'], 'uploadfile_base', 'base_admin_form_uploadfile.html'),basefile)

@@ -59,20 +59,6 @@ class BaseHandler(tornado.web.RequestHandler):
         else:
             self.clear_cookie('session_id')
 
-    def get_filepath(self, user,filename,filehash):
-        nowdir = datetime.now().strftime('%Y%m%d')
-        hashkey = crypto_helper.get_key(filehash, filename, user.id, nowdir)
-        sessionfile = self.get_session(hashkey)
-        if (sessionfile):
-            return sessionfile
-        else:
-            return None
-
-    def set_filepath(self, user,filename,filehash,filepath):
-        nowdir = datetime.now().strftime('%Y%m%d')
-        hashkey = crypto_helper.get_key(filehash, filename, user.id, nowdir)
-        self.set_session(hashkey, filepath, expires=time.time() + 60 * 60 * 24)
-
     def get_deep_dict(self, user, deepnumber):
         deepnumber = deepnumber - 1
         deepstep = int((deepnumber - deepnumber % 5) / 5 + 2)

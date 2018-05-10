@@ -102,19 +102,19 @@ class FileAddHandler(BaseHandler):
         now = datetime.now()
         nowdir = now.strftime('%Y%m%d')
         downpath = os.path.join(downloadpath, nowdir, filehash, filename)
-        if (not os.path.exists(os.path.join(downloadpath, nowdir, filehash))):
+        if (os.path.exists(os.path.join(downloadpath, nowdir, filehash)) is False):
             os.makedirs(os.path.join(downloadpath, nowdir, filehash))
 
         temp_file = os.path.join(usertemppath, finalname)
         with open(temp_file, 'w') as up:
             up.write(filecontent)
 
-        if (not os.path.exists(downpath)):
+        if (os.path.exists(downpath) is False):
             shutil.move(temp_file, downpath)
         else:
             os.unlink(temp_file)
 
-        if (os.path.exists(encrpath)):
+        if (os.path.exists(encrpath) is True):
             os.unlink(encrpath)
 
         crypto_helper.encrypt_file(bytes.fromhex(password), downpath, encrpath)

@@ -9,20 +9,24 @@ import json
 import base64
 import hmac
 import hashlib
-from settings import oss
+from settings import alioss
 
-class alioss():
-    _access_key_id = oss['AccessKeyId']
-    _access_key_secret = oss['AccessKeySecret']
-    _bucket_name = oss['bucket']
-    _endpoint = oss['endpoint']
-    _uploaddir = oss['usertemppath']
+class Alioss():
+    _access_key_id = alioss['AccessKeyId']
+    _access_key_secret = alioss['AccessKeySecret']
+    _bucket_name = alioss['bucket']
+    _endpoint = alioss['endpoint']
+    _uploaddir = alioss['usertemppath']
     def __init__(self):
         self._bucket = oss2.Bucket(oss2.Auth(self._access_key_id, self._access_key_secret), self._endpoint, self._bucket_name)
 
     @property
     def AccessKeyId(self):
         return self._access_key_id
+
+    @property
+    def Bucket(self):
+        return self._bucket
 
     def build_gmt_expired_time(self, expire_time):
         """生成GMT格式的请求超时时间
@@ -102,3 +106,18 @@ class alioss():
 
     def exists(self,filepath):
         return self._bucket.object_exists(filepath)
+
+    def del_dir(self,dirpath,excludepath=None,excludepath1=None):
+        if dirpath is None or dirpath =="":
+            return
+        if alioss["usertemppath"] not in dirpath and alioss["downloadpath"] not in dirpath:
+            return
+
+        for obj in oss2.ObjectIterator(self._bucket, prefix=dirpath, delimiter='/', max_keys=1000):
+            if(excludepath in obj.key or excludepath1 in obj.key):
+                continue
+            elif obj.is_prefix():
+                self.del_dir(obj.key,excludepath,excludepath1)
+            else:
+                self._bucket.delete_object(obj.key)
+

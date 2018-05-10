@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
-
-
+#
+# 系统配置文件，需删除default后缀名后才能生效
+# 缺失配置信息请自行填充完整
+#
 import os
 import time
 import base64
@@ -24,9 +26,9 @@ setting['static_path'] = os.path.join(setting['root_path'], 'lsdong', 'static', 
 
 mail = {}
 
-mail['smtp_server'] = ''
+mail['smtp_server'] = 'smtp.exmail.qq.com'
 mail['password'] =''
-mail['from_addr'] = ''
+mail['from_addr'] = 'mail@lsdong.com'
 
 wechatapi = {}
 wechatapi['appid'] = ''
@@ -38,6 +40,7 @@ wechatapi['access_token_uri'] ='%s%s%s%s%s' % ( 'https://api.weixin.qq.com/sns/o
 wechatapi['access_userinfo_uri'] = 'https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s'
 
 aliyun = {}
+aliyun['debug'] = True
 aliyun['ACCESS_KEY_ID'] = ""
 aliyun['ACCESS_KEY_SECRET'] = ""
 
@@ -46,21 +49,39 @@ aliyun['ACCESS_KEY_SECRET'] = ""
 encryptkey = b'sfHJukzjQeaPNT/ujJ7KWpA6LHyrr0vH'
 
 userinfopath = os.path.join(setting['root_path'], 'lsdong', 'userinfofiles', '')
-usertemppath = os.path.join(setting['root_path'], 'lsdong', 'usertempfiles', '')
 userdatapath = os.path.join(setting['root_path'], 'lsdong', 'userdatafiles', '')
+usertemppath = os.path.join(setting['root_path'], 'lsdong', 'usertempfiles', '')
 downloadpath = os.path.join(setting['root_path'], 'lsdong','static', 'downloadfiles', '')
 downloadurl = '/%s/%s' % ('static', 'downloadfiles')
-#是否启用nginx作为文件上传中间服务器
-isuploadfilenginx = False
 
 alipay = {}
 alipay['debug'] = True
 alipay['appid'] = ''
+alipay['alipay_url'] = 'https://openapi.alipaydev.com/gateway.do'
 alipay['app_return_url'] = 'http://www.lsdong.com/alipayback'
 alipay['app_notify_url'] = 'http://www.lsdong.com/alipaynotify'
 alipay['app_private_key_path'] = os.path.join(setting['root_path'], 'lsdong', 'certs', 'alipayweb','rsa_private_key.pem')
 alipay['app_public_key_path'] = os.path.join(setting['root_path'], 'lsdong', 'certs', 'alipayweb','alipay_public_key.pem')
 
+alioss = {}
+alioss['AccessKeyId'] = ''
+alioss['AccessKeySecret'] = ''
+alioss['bucket'] = 'lsdongcom'
+alioss['endpoint'] = 'https://oss-cn-beijing.aliyuncs.com'
+alioss['host'] = 'https://%s.%s' % (alioss['bucket'], alioss['endpoint']);
+alioss['userinfopath'] = 'userinfofiles'
+alioss['userdatapath'] = 'userdatafiles'
+alioss['usertemppath'] = 'usertempfiles'
+alioss['downloadpath'] = 'downloadfiles'
+alioss['downloadurl'] = '/%s/%s' % (alioss['host'], alioss['downloadpath'])
+
+#是否启用oss作为文件上传服务器
+isuploadfileoss = True
+#是否启用nginx作为文件上传中间服务器
+isuploadfilenginx = False
 sitenotify = '本系统正在紧张开发测试中，请勿使用，我们将尽快为您提供服务'
 lockfile = os.path.join(usertemppath, 'lock')
 adminids = ['']
+filetypelimit = ''
+filesizelimit = 200*1024*1024
+systaskpwd = ''

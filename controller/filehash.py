@@ -7,19 +7,19 @@ from base import BaseHandler
 import shutil
 from datetime import datetime, timedelta
 from model.userfile import userfile
-from settings import oss,filetypelimit,filesizelimit,isuploadfileoss,userdatapath, downloadpath, downloadurl
-from utils.oss_helper import alioss
+from settings import alioss,filetypelimit,filesizelimit,isuploadfileoss,userdatapath, downloadpath, downloadurl
+from utils.oss_helper import Alioss
 
 sys.path.append('..')
 
 
 class FileHashHandler(BaseHandler):
 
-    access_key_id = oss['AccessKeyId']
-    access_key_secret = oss['AccessKeySecret']
-    bucket_name = oss['bucket']
-    endpoint = oss['endpoint']
-    uploaddir = oss['usertemppath']
+    access_key_id = alioss['AccessKeyId']
+    access_key_secret = alioss['AccessKeySecret']
+    bucket_name = alioss['bucket']
+    endpoint = alioss['endpoint']
+    uploaddir = alioss['usertemppath']
 
     @tornado.web.authenticated
     def post(self):
@@ -41,18 +41,29 @@ class FileHashHandler(BaseHandler):
                 self.write(json.dumps(ret))
                 return
 
-        if (isuploadfileoss):
-            filepath = '%s/%s/%s' % (self.uploaddir, filehash, filename)
-            field_dict = {}
-
-            oss = alioss()
-            if (oss.exists(filepath) is False):
-                field_dict['isneed'] = True
+        if (isuploadfileoss is True):
+            oss = Alioss()
+            now = datetime.now()
+            nowdir = now.strftime('%Y%m%d')
+            downpath =  '%s/%s/%s/%s' % (alioss['downloadpath'], nowdir, filehash, filename)
+            if (oss.exists(downpath) is True):
+                ret = {'result': '0'}
+                self.write(json.dumps(ret))
+                return
             else:
-                field_dict['isneed'] = False
+                beforetime = now - timedelta(days=1)
+                beforetimedir = beforetime.strftime('%Y%m%d')
+                beforetimedownpath = '%s/%s/%s/%s' % (alioss['downloadpath'], beforetimedir, filehash, filename)
+                if (oss.exists(beforetimedownpath) is True):
+                    oss.Bucket.copy_object(beforetimedownpath, downpath)
+                    oss.Bucket.delete_object(beforetimedownpath)
+                    ret = {'result': '0'}
+                    self.write(json.dumps(ret))
+                    return
 
+            field_dict = {'result': '1'}
             # object名称
-            field_dict['key'] = filepath
+            field_dict['key'] = downpath
             # access key id
             field_dict['OSSAccessKeyId'] = self.access_key_id
             # Policy包括超时时间(单位秒)和限制条件condition
@@ -74,7 +85,7 @@ class FileHashHandler(BaseHandler):
             now = datetime.now()
             nowdir = now.strftime('%Y%m%d')
             downpath = os.path.join(downloadpath, nowdir, filehash, filename)
-            if (os.path.exists(downpath)):
+            if (os.path.exists(downpath) is True):
                 ret = {'result': '0'}
                 self.write(json.dumps(ret))
                 return
@@ -82,8 +93,8 @@ class FileHashHandler(BaseHandler):
                 beforetime = now - timedelta(days=1)
                 beforetimedir = beforetime.strftime('%Y%m%d')
                 beforetimedownpath = os.path.join(downloadpath, beforetimedir, filehash, filename)
-                if (os.path.exists(beforetimedownpath)):
-                    if (not os.path.exists(os.path.join(downloadpath, nowdir, filehash))):
+                if (os.path.exists(beforetimedownpath) is True):
+                    if (os.path.exists(os.path.join(downloadpath, nowdir, filehash)) is False):
                         os.makedirs(os.path.join(downloadpath, nowdir, filehash))
                     shutil.move(beforetimedownpath, downpath)
                     ret = {'result': '0'}

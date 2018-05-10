@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<FileZilla3>
+    <Servers>
+        <Server>
+            <Host>112.124.25.168</Host>
+            <Port>2021</Port>
+            <Protocol>0</Protocol>
+            <Type>0</Type>
+            <User>webadmin</User>
+            <Pass encoding="base64">d2ViYWRtaW4=</Pass>
+            <Logontype>1</Logontype>
+            <TimezoneOffset>0</TimezoneOffset>
+            <PasvMode>MODE_DEFAULT</PasvMode>
+            <MaximumMultipleConnections>0</MaximumMultipleConnections>
+            <EncodingType>Auto</EncodingType>
+            <BypassProxy>0</BypassProxy>
+            <Name>磐荣</Name>
+            <Comments />
+            <LocalDir />
+            <RemoteDir />
+            <SyncBrowsing>0</SyncBrowsing>磐荣&#x0A;        
+        </Server>
+        <Server>
+            <Host>www.zhisensh.com</Host>
+            <Port>2021</Port>
+            <Protocol>0</Protocol>
+            <Type>0</Type>
+            <User>webadmin</User>
+            <Pass encoding="base64">d2ViYWRtaW4=</Pass>
+            <Logontype>1</Logontype>
+            <TimezoneOffset>0</TimezoneOffset>
+            <PasvMode>MODE_DEFAULT</PasvMode>
+            <MaximumMultipleConnections>0</MaximumMultipleConnections>
+            <EncodingType>Auto</EncodingType>
+            <BypassProxy>0</BypassProxy>
+            <Name>阿里Web</Name>
+            <Comments />
+            <LocalDir />
+            <RemoteDir />
+            <SyncBrowsing>0</SyncBrowsing>阿里Web&#x0A;        
+        </Server>
+        <Server>
+            <Host>www.zhisensh.com</Host>
+            <Port>2021</Port>
+            <Protocol>0</Protocol>
+            <Type>0</Type>
+            <User>zhanghj</User>
+            <Pass encoding="base64">IVFBWkBXU1g=</Pass>
+            <Logontype>1</Logontype>
+            <TimezoneOffset>0</TimezoneOffset>
+            <PasvMode>MODE_DEFAULT</PasvMode>
+            <MaximumMultipleConnections>0</MaximumMultipleConnections>
+            <EncodingType>Auto</EncodingType>
+            <BypassProxy>0</BypassProxy>
+            <Name>阿里云</Name>
+            <Comments />
+            <LocalDir />
+            <RemoteDir />
+            <SyncBrowsing>0</SyncBrowsing>阿里云&#x0A;        
+        </Server>
+    </Servers>
+    <Settings>
+        <Setting name="Use Pasv mode">1</Setting>
+        <Setting name="Limit local ports">0</Setting>
+        <Setting name="Limit ports low">6000</Setting>
+        <Setting name="Limit ports high">7000</Setting>
+        <Setting name="External IP mode">0</Setting>
+        <Setting name="External IP" />
+        <Setting name="External address resolver">http://ip.filezilla-project.org/ip.php</Setting>
+        <Setting name="Last resolved IP" />
+        <Setting name="No external ip on local conn">1</Setting>
+        <Setting name="Pasv reply fallback mode">0</Setting>
+        <Setting name="Timeout">20</Setting>
+        <Setting name="Logging Debug Level">0</Setting>
+        <Setting name="Logging Raw Listing">0</Setting>
+        <Setting name="fzsftp executable" />
+        <Setting name="Allow transfermode fallback">1</Setting>
+        <Setting name="Reconnect count">2</Setting>
+        <Setting name="Reconnect delay">5</Setting>
+        <Setting name="Enable speed limits">0</Setting>
+        <Setting name="Speedlimit inbound">100</Setting>
+        <Setting name="Speedlimit outbound">20</Setting>
+        <Setting name="Speedlimit burst tolerance">0</Setting>
+        <Setting name="Preallocate space">0</Setting>
+        <Setting name="View hidden files">0</Setting>
+        <Setting name="Preserve timestamps">0</Setting>
+        <Setting name="Socket recv buffer size (v2)">4194304</Setting>
+        <Setting name="Socket send buffer size (v2)">262144</Setting>
+        <Setting name="FTP Keep-alive commands">0</Setting>
+        <Setting name="FTP Proxy type">0</Setting>
+        <Setting name="FTP Proxy host" />
+        <Setting name="FTP Proxy user" />
+        <Setting name="FTP Proxy password" />
+        <Setting name="FTP Proxy login sequence" />
+        <Setting name="SFTP keyfiles" />
+        <Setting name="SFTP compression">0</Setting>
+        <Setting name="Proxy type">0</Setting>
+        <Setting name="Proxy host" />
+        <Setting name="Proxy port">0</Setting>
+        <Setting name="Proxy user" />
+        <Setting name="Proxy password" />
+        <Setting name="Logging file" />
+        <Setting name="Logging filesize limit">10</Setting>
+        <Setting name="Logging show detailed logs">0</Setting>
+        <Setting name="Size format">0</Setting>
+        <Setting name="Size thousands separator">1</Setting>
+        <Setting name="Size decimal places">1</Setting>
+        <Setting name="Number of Transfers">2</Setting>
+        <Setting name="Ascii Binary mode">0</Setting>
+        <Setting name="Auto Ascii files">am|asp|bat|c|cfm|cgi|conf|cpp|css|dhtml|diz|h|hpp|htm|html|in|inc|java|js|jsp|lua|m4|mak|md5|nfo|nsi|pas|patch|php|phtml|pl|po|py|qmail|sh|sha1|sha256|sha512|shtml|sql|svg|tcl|tpl|txt|vbs|xhtml|xml|xrc</Setting>
+        <Setting name="Auto Ascii no extension">1</Setting>
+        <Setting name="Auto Ascii dotfiles">1</Setting>
+        <Setting name="Theme">opencrystal/</Setting>
+        <Setting name="Language Code" />
+        <Setting name="Last Server Path">1 0</Setting>
+        <Setting name="Concurrent download limit">0</Setting>
+        <Setting name="Concurrent upload limit">0</Setting>
+        <Setting name="Update Check">1</Setting>
+        <Setting name="Update Check Interval">7</Setting>
+        <Setting name="Last automatic update check">2015-10-29 22:00:58</Setting>
+        <Setting name="Update Check New Version">nightly 2015-07-30 http://filezilla-project.org/nightlies/2015-07-30/x86_64-w64-mingw32/FileZilla_3_setup.exe 7023856 sha512 67e1532cf921b9e47de04b4367a23476e89a82c50ee57f15ad19267ed1c4f2ea74799e6c337722965b18b97a78b6d02e9f679549598ca8c0e64e596d78359b03 &#x0A;release 3.12.0.2 http://downloads.sourceforge.net/filezilla/FileZilla_3.12.0.2_win64-setup.exe 6483456 sha512 e0ed51360a7295f090919c21b88827eff32f632fd44bc3eb3b9d0525b7c0e2a0606776fbb42f83ec1e0a3f6e0169ecee0175481ccf277574861cf8a5c1c96bd8&#x0A;&#x0A;3.12.0.2 (2015-07-09)&#x0A;&#x0A;- Fix regression on servers that have MLSD facts disabled by default&#x0A;&#x0A;3.12.0.1 (2015-07-09)&#x0A;&#x0A;- Fix detection of UTF-8 support&#x0A;- Fix location of file list status bar, it was shifted by one pixel&#x0A;&#x0A;3.12.0 (2015-07-08)&#x0A;&#x0A;+ Directory comparison can be configured for Site Manager entries and bookmarks&#x0A;- Instead of skipping commands due to spontaneous connection failures while executing a command, reconnect and retry&#x0A;- FileZilla no longer shows popup dialogs such as the file exists dialog if another dialog or message box is already shown&#x0A;- Improved compatibility with servers sending malformed FEAT replies&#x0A;&#x0A;3.12.0-rc1 (2015-06-29)&#x0A;&#x0A;+ FileZilla no longer visually enters each visited directory during recursive operations, e.g. when downloading or deleting remote directories. During recursive operations the server&apos;s directory structure can now be navigated as if idle&#x0A;+ Ask for confirmation if trying to load Site Manager data originating from a future version of FileZilla&#x0A;+ Display location of settings directory on the About dialog&#x0A;+ Display detected CPU features (on x86) on the About dialog&#x0A;- Remove certificate verification messages in the message log for data connections&#x0A;- Speed up parsing of the PASV reply&#x0A;- The status bar of the search dialog now shows the number of found matches again&#x0A;- OS X: Configuring SFTP keys no longer fails if the full path of FileZilla&apos;s application bundle contains spaces&#x0A;- *nix: Make waitable conditions immune to wallclock changes if the system supports both clock_gettime and pthread_condattr_setclock&#x0A;- Fixed a rare crash when queuing many socket threads for deletion at the same time&#x0A;&#x0A;3.11.0.2 (2015-06-02)&#x0A;&#x0A;- Fixed a potential crash if a connection gets remotely closed in the same moment a new connection is to be opened&#x0A;- Improved compatibility with servers sending pre-epoch timestamps&#x0A;- Fixed pt_BR translation&#x0A;&#x0A;3.11.0.1 (2015-05-22)&#x0A;&#x0A;! Reject Diffie-Hellman Groups smaller than 1024 bits when using FTP over TLS to protect against the Logjam attack&#x0A;- Do not bind the source IP address of the data connection if the server is not configured properly&#x0A;- Deleting bookmarks from the bookmarks dialog no longer deletes the wrong bookmark&#x0A;- Fixed CPU compatibility issues on 64bit binaries&#x0A;&#x0A;3.11.0 (2015-05-19)&#x0A;&#x0A;- Ensure the title bar is at least partially inside the screen boundary when restoring a saved window position&#x0A;- Fixed crash if opening a wrapped dialog without having restarted FileZilla after having change language to Chinese or Japanese&#x0A;&#x0A;3.11.0-rc1 (2015-05-12)&#x0A;&#x0A;+ Implemented new date/time handling to solve issues with DST conversion&#x0A;+ *nix: Official Linux binaries are now built for Debian Jessie&#x0A;+ In passive mode transfer, the source IP of the data connection is now bound to the same source IP as the control connection&#x0A;- Requeueing of folder items no longer prints an error message&#x0A;- Fix disabling of timeouts&#x0A;- MSW: Fix the returned error level of the installer&#x0A;- Fix a crash if disconnecting during transfers&#x0A;- Official binaries now link against GnuTLS to 3.4.1&#x0A;- Official binaries now link against SQLite to 3.8.10.1&#x0A;</Setting>
+        <Setting name="Update Check Check Beta">0</Setting>
+        <Setting name="Show debug menu">0</Setting>
+        <Setting name="File exists action download">0</Setting>
+        <Setting name="File exists action upload">0</Setting>
+        <Setting name="Allow ascii resume">0</Setting>
+        <Setting name="Greeting version">3.10.3</Setting>
+        <Setting name="Onetime Dialogs">0001</Setting>
+        <Setting name="Show Tree Local">1</Setting>
+        <Setting name="Show Tree Remote">1</Setting>
+        <Setting name="File Pane Layout">0</Setting>
+        <Setting name="File Pane Swap">0</Setting>
+        <Setting name="Last local directory">E:\</Setting>
+        <Setting name="Filelist directory sort">0</Setting>
+        <Setting name="Filelist name sort">0</Setting>
+        <Setting name="Queue successful autoclear">0</Setting>
+        <Setting name="Queue column widths">180 60 180 80 60 150</Setting>
+        <Setting name="Local filelist colwidths">203 80 100 120</Setting>
+        <Setting name="Remote filelist colwidths">275 75 80 100 80 80</Setting>
+        <Setting name="Window position and size">1 -15 24 884 608 </Setting>
+        <Setting name="Splitter positions (v2)">97 -131 500000000 133 133 500000000</Setting>
+        <Setting name="Local filelist sortorder">0 0</Setting>
+        <Setting name="Remote filelist sortorder">0 0</Setting>
+        <Setting name="Time Format" />
+        <Setting name="Date Format" />
+        <Setting name="Show message log">1</Setting>
+        <Setting name="Show queue">1</Setting>
+        <Setting name="Default editor" />
+        <Setting name="Always use default editor">0</Setting>
+        <Setting name="Inherit system associations">1</Setting>
+        <Setting name="Custom file associations" />
+        <Setting name="Comparison mode">1</Setting>
+        <Setting name="Comparison threshold">1</Setting>
+        <Setting name="Site Manager position">0 414 114 522 460 </Setting>
+        <Setting name="Theme icon size" />
+        <Setting name="Timestamp in message log">0</Setting>
+        <Setting name="Sitemanager last selected">0/磐荣</Setting>
+        <Setting name="Local filelist shown columns">1111</Setting>
+        <Setting name="Remote filelist shown columns">111111</Setting>
+        <Setting name="Local filelist column order">0,1,2,3</Setting>
+        <Setting name="Remote filelist column order">0,1,2,3,4,5</Setting>
+        <Setting name="Filelist status bar">1</Setting>
+        <Setting name="Filter toggle state">0</Setting>
+        <Setting name="Show quickconnect bar">1</Setting>
+        <Setting name="Messagelog position">0</Setting>
+        <Setting name="Last connected site">0/阿里云</Setting>
+        <Setting name="File doubleclock action">0</Setting>
+        <Setting name="Dir doubleclock action">0</Setting>
+        <Setting name="Minimize to tray">0</Setting>
+        <Setting name="Search column widths" />
+        <Setting name="Search column shown" />
+        <Setting name="Search column order" />
+        <Setting name="Search window size" />
+        <Setting name="Comparison hide identical">0</Setting>
+        <Setting name="Search sort order" />
+        <Setting name="Edit track local">1</Setting>
+        <Setting name="Prevent idle sleep">1</Setting>
+        <Setting name="Filteredit window size" />
+        <Setting name="Enable invalid char filter">1</Setting>
+        <Setting name="Invalid char replace">_</Setting>
+        <Setting name="Already connected choice">2</Setting>
+        <Setting name="Edit status dialog size" />
+        <Setting name="Display current speed">0</Setting>
+        <Setting name="Toolbar hidden">0</Setting>
+        <Setting name="Strip VMS revisions">0</Setting>
+        <Setting name="Show Site Manager on startup">0</Setting>
+        <Setting name="Prompt password change">1</Setting>
+        <Setting name="Persistent Choices">0</Setting>
+        <Setting name="Config Location">C:\Users\zhanghj\AppData\Roaming\FileZilla\</Setting>
+        <Setting name="Kiosk mode">0</Setting>
+        <Setting name="Disable update check">0</Setting>
+        <LastServer>
+            <Host>www.zhisensh.com</Host>
+            <Port>2021</Port>
+            <Protocol>0</Protocol>
+            <Type>0</Type>
+            <User>zhanghj</User>
+            <Pass encoding="base64">IVFBWkBXU1g=</Pass>
+            <Logontype>1</Logontype>
+            <TimezoneOffset>0</TimezoneOffset>
+            <PasvMode>MODE_DEFAULT</PasvMode>
+            <MaximumMultipleConnections>0</MaximumMultipleConnections>
+            <EncodingType>Auto</EncodingType>
+            <BypassProxy>0</BypassProxy>
+            <Name>阿里云</Name>
+        </LastServer>
+    </Settings>
+</FileZilla3>

@@ -23,7 +23,10 @@ from controller.pay.alipay import alipaybackdeep
 from controller.pay.alipay import alipaynotifydeep
 from controller.oss.alioss import aliossnotify
 
+from controller import systask
 from controller import admin
+
+from controller import about
 
 url = [
     (r'/', index.IndexHandler),
@@ -47,5 +50,7 @@ url = [
     (r'/alipaybackdeep/(.*)/(.*)/(.*)', alipaybackdeep.AlipayBackDeepHandler),
     (r'/alipaynotifydeep/(.*)/(.*)/(.*)', alipaynotifydeep.AlipayNotifyDeepHandler),
     (r'/aliossnotify', aliossnotify.Alioss_Notify_Handler),
-    (r'/admin', admin.AdminHandler)
+    (r'/systask', systask.SysTaskHandler),
+    (r'/admin', admin.AdminHandler),
+    (r'/about', about.AboutHandler)
 ]

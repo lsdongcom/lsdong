@@ -1,41 +1,10 @@
 # -*- coding: UTF-8 -*-
 
 import os, struct
-import json
-from settings import userinfopath
 from Crypto import Random
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
 from Crypto.Hash import SHA224
-
-def check_idx(unionid, idx, usertype):
-    userdir = os.path.join(userinfopath, usertype)
-    if not os.path.dirname(userdir):
-        print('not set %s userinfo dir. please check', usertype)
-        return '', False
-    filepath = os.path.join(userdir, idx)
-    if not os.path.exists(filepath):
-        return idx, False
-    hash = bytes(unionid, encoding='utf-8')
-    with open(filepath, 'r') as f:
-        jdata = f.readlines()
-        jdata = aes_decrypt(jdata[0], hash)
-        data = json.loads(jdata)
-        if (data['userid'] == unionid):
-            return idx, True
-    for i in range(9):
-        newidx = '%s%s' % (idx, str(i))
-        newfilepath = os.path.join(userdir, newidx)
-        if not os.path.exists(newfilepath):
-            return newidx, False
-        with open(newfilepath, 'r') as f:
-            jdata = f.readlines()
-            jdata = aes_decrypt(jdata[0], hash)
-            data = json.loads(jdata)
-            if (data['userid'] == unionid):
-                return newidx, True
-    print('%s userinfo idx:%s error. please check', usertype, idx)
-    return '', False
 
 def get_key(password, salt=None, salt1=None, salt2=None, is256=True):
     #return bytes.fromhex(SHA256.new(password.encode("utf8")).hexdigest())

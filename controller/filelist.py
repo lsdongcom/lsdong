@@ -12,7 +12,8 @@ from model.userinfo import userinfo
 from model.userfile import userfile
 from utils.file_helper import getfiletypename,lock_site_notify
 import numpy as np
-
+from utils.oss_helper import Alioss
+import oss2
 sys.path.append('..')
 
 
@@ -21,7 +22,6 @@ class FileListHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         islock, site_notify = lock_site_notify()
-
         user = self.get_current_user()
         filetype = self.input_default('t')
         filetypename = getfiletypename(int(filetype))

@@ -12,9 +12,10 @@ from model.userinfo import userinfo
 from model.userfile import userfile
 from  model import userpay
 from utils.file_helper import getfiletypename,lock_site_notify
-from settings import userdatapath,downloadpath,downloadurl
-from urllib.parse import urljoin
+from settings import alioss,isuploadfileoss, userdatapath,downloadpath,downloadurl
+from utils.file_helper import file_exists,file_read,file_write
 from sdk.alipay_pay import Alipay
+from utils.oss_helper import Alioss
 sys.path.append('..')
 
 class FileDownHandler(BaseHandler):
@@ -48,9 +49,7 @@ class FileDownHandler(BaseHandler):
                 data.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
 
         if (fileindex > len(data)):
-            ret = {'result': 'error'}
-            ret['info'] = '参数异常'
-            self.write(json.dumps(ret))
+            self.redirect('view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype, actiontype, actiontype, '参数异常'))
             return
 
         selectitem = data[fileindex]
@@ -70,43 +69,22 @@ class FileDownHandler(BaseHandler):
                 return
             else:
                 result = alipay.refund(refund_amount=amount, out_trade_no=data['out_trade_no'])
-
+        oss = Alioss()
         if (actiontype == '1'):
             filedata.del_file(savename)
-            encrpath = os.path.join(userdatapath, savename)
-            os.unlink(encrpath)
+            if isuploadfileoss is True:
+                encrpath = '%s/%s' % (alioss['userdatapath'], savename)
+                oss.Bucket.delete_object(encrpath)
+            else:
+                encrpath = os.path.join(userdatapath, savename)
+                os.unlink(encrpath)
             self.redirect('list?t=%s&m=%s' % (filetype,'删除成功'))
             return
         elif (actiontype == '0'):
-            downurl = self.get_filepath(user, filename, filehash)
-            if (downurl):
-                self.redirect(downurl)
-                return
-            else:
-                now = datetime.now()
-                nowdir = now.strftime('%Y%m%d')
-                downpath = os.path.join(downloadpath, nowdir, filehash, filename)
-                if (not os.path.exists(downpath)):
-                    if (not os.path.exists(os.path.join(downloadpath, nowdir, filehash))):
-                        os.makedirs(os.path.join(downloadpath, nowdir, filehash))
+            ret = self.getdownurl(user, password, filename, filehash, savename, fileindex, filetype, actiontype, oss)
+            self.redirect(ret['url'])
 
-                    beforetime = now - timedelta(days=1)
-                    beforetimedir = beforetime.strftime('%Y%m%d')
-                    beforetimedownpath = os.path.join(downloadpath, beforetimedir, filehash, filename)
-                    if (os.path.exists(beforetimedownpath)):
-                        shutil.move(beforetimedownpath, downpath)
-                    else:
-                        tempfile = '%s%s' % (filename, '.tmp')
-                        temppath = os.path.join(downloadpath, nowdir, filehash, tempfile)
-                        if (not os.path.exists(temppath)):
-                            encrpath = os.path.join(userdatapath, savename)
-                            decryhash = crypto_helper.get_key(password, user.id)
-                            crypto_helper.decrypt_file(bytes.fromhex(decryhash), encrpath, temppath)
-                            shutil.move(temppath, downpath)
 
-                downurl = '%s/%s/%s/%s' % (downloadurl, nowdir, filehash, filename)
-                self.set_filepath(user, filename, filehash, downurl)
-                self.redirect(downurl)
 
     @tornado.web.authenticated
     def post(self):
@@ -130,6 +108,7 @@ class FileDownHandler(BaseHandler):
 
         if (fileindex > len(data)):
             ret = {'result': 'error'}
+            ret['code'] = '1';
             ret['info'] = '参数异常'
             self.write(json.dumps(ret))
             return
@@ -147,6 +126,7 @@ class FileDownHandler(BaseHandler):
                 islock, site_notify = lock_site_notify()
                 if (islock is True):
                     ret = {'result': 'error'}
+                    ret['code'] = '1';
                     ret['info'] = site_notify;
                     self.write(ret)
                     return
@@ -164,50 +144,80 @@ class FileDownHandler(BaseHandler):
                 self.write(json.dumps(ret))
                 return
 
+        oss = Alioss()
         if(passwordhash != keyhash):
             ret = {'result': 'error'}
-            ret['info'] = '密码错误，请重试';
+            ret['code'] = '0';
+            ret['info'] = '';
             self.write(json.dumps(ret))
             return
         elif(actiontype == '1'):
             filedata.del_file(savename)
-            encrpath = os.path.join(userdatapath, savename)
-            os.unlink(encrpath)
-            ret = {'result': 'ok'}
+            if isuploadfileoss is True:
+                encrpath = '%s/%s' % (alioss['userdatapath'], savename)
+                oss.Bucket.delete_object(encrpath)
+            else:
+                encrpath = os.path.join(userdatapath, savename)
+                os.unlink(encrpath)
+            ret = {'result': 'delete'}
             self.write(json.dumps(ret))
             return
         elif(actiontype == '0'):
-            downurl = self.get_filepath(user, filename, filehash)
-            if(downurl):
-                ret = {'result': downurl}
-                self.write(json.dumps(ret))
-                return
+            ret = self.getdownurl(user, password, filename, filehash, savename, fileindex, filetype, actiontype, oss)
+            self.write(json.dumps(ret))
+
+    def getdownurl(self, user, password, filename, filehash, savename, fileindex, filetype, actiontype, oss):
+        now = datetime.now()
+        nowdir = now.strftime('%Y%m%d')
+        beforetime = now - timedelta(days=1)
+        beforetimedir = beforetime.strftime('%Y%m%d')
+        ossencrpath = '%s/%s' % (alioss['userdatapath'], savename)
+        localencrpath = os.path.join(userdatapath, savename)
+        if isuploadfileoss is True:
+            downpath = '%s/%s/%s/%s' % (alioss['downloadpath'], nowdir, filehash, filename)
+            beforetimedownpath = '%s/%s/%s/%s' % (alioss['downloadpath'], beforetimedir, filehash, filename)
+        else:
+            downpath = os.path.join(downloadpath, nowdir, filehash, filename)
+            beforetimedownpath = os.path.join(downloadpath, beforetimedir, filehash, filename)
+
+        if file_exists(downpath,oss) is False and file_exists(beforetimedownpath,oss) is False:
+            if (os.path.exists(os.path.join(downloadpath, nowdir, filehash)) is False):
+                os.makedirs(os.path.join(downloadpath, nowdir, filehash))
+            tempfile = '%s%s' % (filename, '.tmp')
+            temppath = os.path.join(downloadpath, nowdir, filehash, tempfile)
+            if (os.path.exists(temppath) is False):
+                decryhash = crypto_helper.get_key(password, user.id)
+                if isuploadfileoss is True:
+                    oss.Bucket.get_object_to_file(ossencrpath, localencrpath)
+                    crypto_helper.decrypt_file(bytes.fromhex(decryhash), localencrpath, temppath)
+                    oss.Bucket.put_object_from_file(downpath, temppath)
+                    os.unlink(temppath)
+                else:
+                    crypto_helper.decrypt_file(bytes.fromhex(decryhash), localencrpath, temppath)
+                    shutil.move(temppath, downpath)
             else:
-                now = datetime.now()
-                nowdir = now.strftime('%Y%m%d')
-                downpath = os.path.join(downloadpath, nowdir, filehash, filename)
-                if (not os.path.exists(downpath)):
-                    if (not os.path.exists(os.path.join(downloadpath, nowdir, filehash))):
-                        os.makedirs(os.path.join(downloadpath, nowdir, filehash))
+                ret = {'result': 'error'}
+                ret['code'] = '0';
+                ret['url'] = 'view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype, actiontype, filename, '文件正在解密,请稍候重新获取下载链接');
+                ret['info'] = '文件正在解密,请稍候重新获取下载链接';
+                return ret
+        elif file_exists(beforetimedownpath,oss) is True:
+            if isuploadfileoss is True:
+                oss.Bucket.copy_object(beforetimedownpath, downpath)
+                oss.Bucket.delete_object(beforetimedownpath)
+            else:
+                if (os.path.exists(os.path.join(downloadpath, nowdir, filehash)) is False):
+                    os.makedirs(os.path.join(downloadpath, nowdir, filehash))
+                shutil.move(beforetimedownpath, downpath)
 
-                    beforetime = now - timedelta(days=1)
-                    beforetimedir = beforetime.strftime('%Y%m%d')
-                    beforetimedownpath = os.path.join(downloadpath, beforetimedir, filehash, filename)
-                    if (os.path.exists(beforetimedownpath)):
-                        shutil.move(beforetimedownpath, downpath)
-                    else:
-                        tempfile = '%s%s' % (filename, '.tmp')
-                        temppath = os.path.join(downloadpath, nowdir, filehash, tempfile)
-                        if (not os.path.exists(temppath)):
-                            encrpath = os.path.join(userdatapath, savename)
-                            decryhash = crypto_helper.get_key(password, user.id)
-                            crypto_helper.decrypt_file(bytes.fromhex(decryhash), encrpath, temppath)
-                            shutil.move(temppath, downpath)
-
-                downurl = '%s/%s/%s/%s' % (downloadurl, nowdir, filehash, filename)
-                self.set_filepath(user, filename, filehash, downurl)
-                ret = {'result': downurl}
-                self.write(json.dumps(ret))
+        if isuploadfileoss is True:
+            downurl = oss.Bucket.sign_url('GET', downpath, 60 * 60 * 8)
+        else:
+            downurl = '%s/%s/%s/%s' % (downloadurl, nowdir, filehash, filename)
+        ret = {'result': 'ok'}
+        ret['url'] = downurl;
+        ret['info'] = '';
+        return ret
 
 
 

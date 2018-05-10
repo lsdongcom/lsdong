@@ -133,12 +133,16 @@
                           "s": filesize
                     },
                     success: function (data) {
-                        if(data.result == "error"){
+                        if(data.result == "0"){
+                            uploadfilefinish();
+                        }
+                        else if(data.result == "1"){
+                            uploadfileoss(data);
+                        }
+                        else{
                             uploadError();
                             toastr.warning(data.info);
                             setTimeout("location.href='/filelist?t={{ filetype }}';", 2000);
-                        }else{
-                            uploadfileoss(data);
                         }
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {

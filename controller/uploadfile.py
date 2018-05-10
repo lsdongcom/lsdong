@@ -66,7 +66,7 @@ class UploadFileHandler(BaseHandler):
         now = datetime.now()
         nowdir = now.strftime('%Y%m%d')
         downpath = os.path.join(downloadpath, nowdir, filehash, filename)
-        if (not os.path.exists(os.path.join(downloadpath, nowdir, filehash))):
+        if (os.path.exists(os.path.join(downloadpath, nowdir, filehash)) is False):
             os.makedirs(os.path.join(downloadpath, nowdir, filehash))
         file_metas = self.request.files.get('file', None)  # 提取表单中‘name’为‘file’的文件元数据
         if file_metas:
@@ -75,12 +75,12 @@ class UploadFileHandler(BaseHandler):
                 up.write(file_metas[0]['body'])
 
             temp_file = os.path.join(usertemppath, finalname)
-            if (not os.path.exists(downpath)):
+            if (os.path.exists(downpath) is False):
                 shutil.move(temp_file, downpath)
             else:
                 os.unlink(temp_file)
 
-        if(os.path.exists(encrpath)):
+        if(os.path.exists(encrpath) is True):
             os.unlink(encrpath)
 
         crypto_helper.encrypt_file(bytes.fromhex(password), downpath, encrpath)

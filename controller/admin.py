@@ -13,7 +13,8 @@ from datetime import datetime,timedelta
 from safeutils import crypto_helper
 from model.userinfo import userinfo
 from model.userfile import userfile
-from settings import adminids,lockfile
+from settings import adminids,lockfile,isuploadfileoss,alioss
+from utils.oss_helper import Alioss
 sys.path.append('..')
 
 class AdminHandler(BaseHandler):
@@ -22,19 +23,20 @@ class AdminHandler(BaseHandler):
     def get(self):
         user = self.get_current_user()
         if(user.id not in adminids):
-            self.redirect('/')
+            self.write('ok')
             return
 
         lock = self.input_default('l')
         unlock = self.input_default('u')
         fileclear = self.input_default('c')
         if(lock):
-            if (not os.path.exists(lockfile)):
+            if (os.path.exists(lockfile) is False):
                 with open(lockfile, 'w+') as up:
                     up.write(user.nickname)
         if(unlock):
-            if (os.path.exists(lockfile)):
+            if (os.path.exists(lockfile) is True):
                 os.unlink(lockfile)
+
         if(fileclear):
             now = datetime.now()
             nowdir = now.strftime('%Y%m%d')
@@ -53,6 +55,17 @@ class AdminHandler(BaseHandler):
                     fullpath = os.path.join(downloadpath, file)
                     if (os.path.isdir(fullpath)):
                         shutil.rmtree(fullpath)
+
+            if isuploadfileoss is True:
+                oss = Alioss()
+                deltemppath = '%s/%s' % (alioss['usertemppath'], '20')
+                temppath = '%s/%s' % (alioss['usertemppath'], nowdir)
+                beforetimetemppath = '%s/%s' % (alioss['usertemppath'], beforetimedir)
+                deldownpath = '%s/%s' % (alioss['downloadpath'], '20')
+                downpath = '%s/%s' % (alioss['downloadpath'], nowdir)
+                beforetimedownpath = '%s/%s' % (alioss['downloadpath'], beforetimedir)
+                oss.del_dir(deltemppath, temppath, beforetimetemppath)
+                oss.del_dir(deldownpath, downpath, beforetimedownpath)
 
         self.write('success')
 
