@@ -1,6 +1,10 @@
 # Byte-compiled / optimized / DLL files
 .idea/
 __pycache__/
+userinfofiles/
+userdatafiles/
+usertempfiles/
+downloadfiles/
 *.py[cod]
 *$py.class
 settings.py
