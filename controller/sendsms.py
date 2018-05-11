@@ -1,11 +1,10 @@
 # -*- coding: UTF-8 -*-
 
 
-import os,os.path,sys
+import sys
 import json
 import tornado
 from base import BaseHandler
-import time
 import uuid
 from utils import  tool
 from sdk import aliyun_sms

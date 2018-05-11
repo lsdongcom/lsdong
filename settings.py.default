@@ -26,9 +26,9 @@ setting['static_path'] = os.path.join(setting['root_path'], 'lsdong', 'static', 
 
 mail = {}
 
-mail['smtp_server'] = 'smtp.exmail.qq.com'
+mail['smtp_server'] = ''
 mail['password'] =''
-mail['from_addr'] = 'mail@lsdong.com'
+mail['from_addr'] = ''
 
 wechatapi = {}
 wechatapi['appid'] = ''
@@ -46,13 +46,18 @@ aliyun['ACCESS_KEY_SECRET'] = ""
 
 #encryptkey = bytes(setting['cookie_secret'][0:32], encoding='utf-8')
 #print(encryptkey)
-encryptkey = b'sfHJukzjQeaPNT/ujJ7KWpA6LHyrr0vH'
+encryptkey = b''
 
 userinfopath = os.path.join(setting['root_path'], 'lsdong', 'userinfofiles', '')
 userdatapath = os.path.join(setting['root_path'], 'lsdong', 'userdatafiles', '')
 usertemppath = os.path.join(setting['root_path'], 'lsdong', 'usertempfiles', '')
 downloadpath = os.path.join(setting['root_path'], 'lsdong','static', 'downloadfiles', '')
+#该项配置使用云存储后将失效
 downloadurl = '/%s/%s' % ('static', 'downloadfiles')
+#本机提供文件下载服务请使用下面配置并生成对应文件夹
+#downloadpath = os.path.join(setting['root_path'], 'lsdong','static', 'downloadfiles', '')
+#云存储提供文件下载服务请使用下面配置并生成对应文件夹
+downloadpath = os.path.join(setting['root_path'], 'lsdong','downloadfiles', '')
 
 alipay = {}
 alipay['debug'] = True
@@ -66,8 +71,8 @@ alipay['app_public_key_path'] = os.path.join(setting['root_path'], 'lsdong', 'ce
 alioss = {}
 alioss['AccessKeyId'] = ''
 alioss['AccessKeySecret'] = ''
-alioss['bucket'] = 'lsdongcom'
-alioss['endpoint'] = 'https://oss-cn-beijing.aliyuncs.com'
+alioss['bucket'] = ''
+alioss['endpoint'] = ''
 alioss['host'] = 'https://%s.%s' % (alioss['bucket'], alioss['endpoint']);
 alioss['userinfopath'] = 'userinfofiles'
 alioss['userdatapath'] = 'userdatafiles'
@@ -75,13 +80,18 @@ alioss['usertemppath'] = 'usertempfiles'
 alioss['downloadpath'] = 'downloadfiles'
 alioss['downloadurl'] = '/%s/%s' % (alioss['host'], alioss['downloadpath'])
 
+siteinfo = {}
+siteinfo['onlineservice_url'] = ''
+siteinfo['sitenotify'] = '本系统正在紧张开发测试中，请勿使用，我们将尽快为您提供服务'
+siteinfo['locknotify'] = '站点即将在1小时后更新,为防止数据丢失及支付异常,系统将关闭文件上传和支付功能,敬请谅解'
+siteinfo['filetypelimit'] = ''
+siteinfo['filesizelimit'] = 200*1024*1024
+
+systaskpwd = ''
+lockfile = os.path.join(usertemppath, 'lock')
+adminids = ['']
 #是否启用oss作为文件上传服务器
 isuploadfileoss = True
 #是否启用nginx作为文件上传中间服务器
 isuploadfilenginx = False
-sitenotify = '本系统正在紧张开发测试中，请勿使用，我们将尽快为您提供服务'
-lockfile = os.path.join(usertemppath, 'lock')
-adminids = ['']
-filetypelimit = ''
-filesizelimit = 200*1024*1024
-systaskpwd = ''
+

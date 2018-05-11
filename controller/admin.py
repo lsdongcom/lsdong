@@ -1,18 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-# -*- coding: UTF-8 -*-
-
 import os,os.path,sys
-import json
 import tornado
 from base import BaseHandler
 from settings import usertemppath,downloadpath
-import uuid
 import shutil
 from datetime import datetime,timedelta
-from safeutils import crypto_helper
-from model.userinfo import userinfo
-from model.userfile import userfile
 from settings import adminids,lockfile,isuploadfileoss,alioss
 from utils.oss_helper import Alioss
 sys.path.append('..')

@@ -26,7 +26,7 @@ from controller.oss.alioss import aliossnotify
 from controller import systask
 from controller import admin
 
-from controller import about
+from controller import help
 
 url = [
     (r'/', index.IndexHandler),
@@ -52,5 +52,5 @@ url = [
     (r'/aliossnotify', aliossnotify.Alioss_Notify_Handler),
     (r'/systask', systask.SysTaskHandler),
     (r'/admin', admin.AdminHandler),
-    (r'/about', about.AboutHandler)
+    (r'/help/(.*)', help.HelpHandler)
 ]

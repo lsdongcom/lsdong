@@ -7,11 +7,10 @@ from base import BaseHandler
 from settings import usertemppath,userdatapath,downloadpath
 import uuid
 import shutil
-from datetime import datetime,timedelta
+from datetime import datetime
 from safeutils import crypto_helper
-from model.userinfo import userinfo
 from model.userfile import userfile
-from utils.file_helper import getfiletypename,lock_site_notify
+from utils.file_helper import lock_site_notify
 sys.path.append('..')
 
 class UploadFileHandler(BaseHandler):

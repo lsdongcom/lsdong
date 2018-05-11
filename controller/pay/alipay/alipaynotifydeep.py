@@ -40,7 +40,7 @@ class AlipayNotifyDeepHandler(BaseHandler):
 
         alipay = Alipay()
         success = alipay.verifyurl(data)
-        if not success:
+        if success is False:
             return
 
         paystatus = False

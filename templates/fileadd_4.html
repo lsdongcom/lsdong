@@ -13,7 +13,7 @@
             <div class="nav-collapse collapse">
                 <ul class="nav pull-right">
                     <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
-                    <li><a href="#">客服在线</a></li>
+                    <li><a href="{{ siteinfo['onlineservice_url'] }}" target="_blank">客服在线</a></li>
                     <li class="dropdown">
                         <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="icon-user"></i> {{ username }} <i class="caret"></i>
@@ -33,7 +33,7 @@
                         <a href="/">首页</a>
                     </li>
                     <li>
-                        <a href="/about" >关于</a>
+                        <a href="/help/about.html" >关于</a>
                     </li>
                     <li>
                         <a href="https://github.com/lsdongcom/lsdong/blob/master/README.md" >帮助</a>
@@ -190,7 +190,7 @@
          var file = $("#fileInput");
          var size = file[0].files[0].size;
          //限制为200M以内
-         var limit = {{ filesizelimit }};
+         var limit = {{ siteinfo['filesizelimit'] }};
          if(size<limit){
               var filehash = $("#filehash").val();
               if(filehash == ""){

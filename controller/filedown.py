@@ -8,12 +8,11 @@ import shutil
 import uuid
 from datetime import datetime,timedelta
 from safeutils import crypto_helper
-from model.userinfo import userinfo
 from model.userfile import userfile
 from  model import userpay
-from utils.file_helper import getfiletypename,lock_site_notify
+from utils.file_helper import lock_site_notify
 from settings import alioss,isuploadfileoss, userdatapath,downloadpath,downloadurl
-from utils.file_helper import file_exists,file_read,file_write
+from utils.file_helper import file_exists
 from sdk.alipay_pay import Alipay
 from utils.oss_helper import Alioss
 sys.path.append('..')
@@ -23,7 +22,7 @@ class FileDownHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         sessionkey = self.input_default('k')
-        if (not userpay.checkPaySession(self, sessionkey)):
+        if (userpay.checkPaySession(self, sessionkey) is False):
             url = '/view?k=%s&m=%s' % (sessionkey, '支付失败,请重试')
             self.redirect(url)
             return
@@ -61,7 +60,7 @@ class FileDownHandler(BaseHandler):
         keyhash = crypto_helper.get_key(password, user.id, filehash, None, False)
 
         alipay = Alipay()
-        if not alipay.refundquery(payno):
+        if alipay.refundquery(payno) is False:
             if (passwordhash != keyhash):
                 amount = round(float(amount) * 0.8, 2)
                 result = alipay.refund(refund_amount=amount, out_trade_no=data['out_trade_no'])

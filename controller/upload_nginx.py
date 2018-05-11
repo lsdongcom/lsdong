@@ -4,18 +4,25 @@ import os,os.path,sys
 import json
 import tornado
 from base import BaseHandler
-from settings import usertemppath,userdatapath,downloadpath
+from settings import userdatapath,downloadpath
 import shutil
-from datetime import datetime,timedelta
+from datetime import datetime
 from safeutils import crypto_helper
-from model.userinfo import userinfo
 from model.userfile import userfile
+from utils.file_helper import lock_site_notify
 sys.path.append('..')
 
 class Upload_Nginx_Handler(BaseHandler):
 
     @tornado.web.authenticated
     def post(self):
+        islock, notify = lock_site_notify()
+        if (islock is True):
+            ret = {'result': 'error'}
+            ret['info'] = notify;
+            self.write(ret)
+            return
+
         keys = self.request.arguments.keys()
         if "file.path" not in keys and "userfile.path" not in keys:
             self.set_status(status_code=400, reason="file field not exist.")

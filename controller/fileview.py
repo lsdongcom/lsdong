@@ -1,21 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-import os,os.path,sys
-import json
+import sys
 import tornado
 from base import BaseHandler
-import shutil
-import uuid
-from datetime import datetime,timedelta
-from safeutils import crypto_helper
-import time
 from  model import userpay
-from model.userinfo import userinfo
-from model.userfile import userfile
 from utils.file_helper import getfiletypename,lock_site_notify
-from settings import userdatapath,downloadpath,downloadurl
-from urllib.parse import urljoin
-
+from settings import siteinfo
 sys.path.append('..')
 
 class FileViewHandler(BaseHandler):
@@ -41,7 +31,7 @@ class FileViewHandler(BaseHandler):
         if filetype:
             filetypename = getfiletypename(int(filetype))
             self.render('fileview_' + filetype + '.html', username=user.nickname, filetype=filetype, filetypename=filetypename,
-                        fileindex=fileindex, actiontype=actiontype, filename=filename, message=message,site_notify = site_notify)
+                        fileindex=fileindex, actiontype=actiontype, filename=filename, message=message,site_notify=site_notify, siteinfo=siteinfo)
 
 
 

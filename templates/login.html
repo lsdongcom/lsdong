@@ -17,7 +17,7 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/">首页</a></li>
-                    <li><a href="/about">关于</a></li>
+                    <li><a href="/help/about.html" >关于</a></li>
                     <li><a href="https://github.com/lsdongcom/lsdong/blob/master/README.md">帮助</a></li>
                     <li><a href="admin#lsdong.com">联系我们</a></li>
                     <li class="dropdown">
@@ -34,7 +34,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
-                    <li><a href="#">客服在线</a></li>
+                    <li><a href="{{ siteinfo['onlineservice_url'] }}" target="_blank">客服在线</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
@@ -62,7 +62,13 @@
                 href: ""
             });
     </script>
+    <style>
+        a.protocol:link{color: #000000 ; text-decoration:none;} /*常规时候的样式*/
+        a.protocol:visited{color: #000000; text-decoration:none;} /*鼠标指上去的样式*/
+        a.protocol:hover {color: #000000; text-decoration:underline;} /*访问过后的样式*/
+    </style>
     <!-- Main component for a primary marketing message or call to action -->
+    <div style="text-align:center"><p>使用前请阅读:<u><a class="protocol" href="/help/protocol.html" >老树洞安全存储服务协议</a></p></u></div>
     <div class="jumbotron">
         <h2>老树洞-开源金融级文件加密存储平台</h2>
         <p>

@@ -1,19 +1,15 @@
 # -*- coding: UTF-8 -*-
 
 
-import os,os.path,sys
-import json
+import sys
 import tornado
 from base import BaseHandler
-import string
 from datetime import datetime
 from urllib import parse
-from model.userinfo import userinfo
 from model.userfile import userfile
 from utils.file_helper import getfiletypename,lock_site_notify
 import numpy as np
-from utils.oss_helper import Alioss
-import oss2
+from settings import siteinfo
 sys.path.append('..')
 
 
@@ -35,7 +31,7 @@ class FileListHandler(BaseHandler):
         filelist = filedata.filelist
         if(len(filelist)<=0):
             self.render('filelist.html', username=user.nickname, filetype=filetype, filetypename=filetypename,
-                        filelist=[], message=message,site_notify=site_notify)
+                        filelist=[], message=message,site_notify=site_notify, siteinfo=siteinfo)
             return
         data = []
         alist = np.array(filelist)
@@ -60,5 +56,5 @@ class FileListHandler(BaseHandler):
                 data.append([item[0], item[1], filesize, item[3], item[4], item[5], item[6], filetime, filenameurl])
 
         self.render('filelist.html', username=user.nickname, filetype=filetype, filetypename=filetypename,
-                    filelist=data, message=message, site_notify=site_notify)
+                    filelist=data, message=message,site_notify=site_notify, siteinfo=siteinfo)
 

@@ -3,7 +3,7 @@
 import os.path
 import re
 from datetime import datetime,timedelta
-from settings import sitenotify,lockfile,usertemppath,isuploadfileoss
+from settings import siteinfo,lockfile,usertemppath,isuploadfileoss
 
 def getfiletypename(filetype):
     if (filetype is 1): return '邮箱校验'
@@ -24,8 +24,8 @@ def file_extension(filename):
 
 def lock_site_notify():
     if (os.path.exists(lockfile) is True):
-        return True,'站点即将在1小时后更新,为防止数据丢失及支付异常,系统将关闭文件上传和支付功能,敬请谅解'
-    return False,sitenotify
+        return True,siteinfo['locknotify']
+    return False,siteinfo['sitenotify']
 
 def deep_auth_create(userid, code):
     filename = '%s_%s' % (userid, code)

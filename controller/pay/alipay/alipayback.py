@@ -27,7 +27,7 @@ class AlipayBackHandler(BaseHandler):
         paystatus = False
         for i in range(10):
             time.sleep(3)
-            if (alipay.query(out_trade_no)):
+            if (alipay.query(out_trade_no) is True):
                 paystatus = True
                 break
 
@@ -38,6 +38,7 @@ class AlipayBackHandler(BaseHandler):
             self.redirect(url)
             return
 
+        # 由down处理付款校验和退款业务处理
         self.redirect('/down?k=%s'% (sessionkey))
 
 

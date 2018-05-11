@@ -33,16 +33,12 @@ class AlipayNotifyHandler(BaseHandler):
 
         alipay = Alipay()
         success = alipay.verifyurl(data)
-        if success and data["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED"):
-            paystatus = True
-        else:
+        if success is False or data["trade_status"] not in ("TRADE_SUCCESS", "TRADE_FINISHED"):
             return
 
         out_trade_no = data['out_trade_no']
         amount = data['amount']
-        paystatus = False
-
-        if alipay.refundquery(out_trade_no):
+        if alipay.refundquery(out_trade_no) is True:
             return
 
         keyhash = crypto_helper.get_key(payhash, filehash, None, None, False)
