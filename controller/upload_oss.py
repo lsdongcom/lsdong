@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-import os,os.path,sys,shutil
+import os,os.path,sys
 import json
 import tornado
 from base import BaseHandler

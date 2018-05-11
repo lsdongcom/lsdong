@@ -1,10 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-import os,os.path,sys
+import sys
 import json
 import tornado
 from base import BaseHandler
-import time
 from utils import  tool
 sys.path.append('..')
 

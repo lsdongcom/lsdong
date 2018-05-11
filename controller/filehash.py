@@ -7,7 +7,7 @@ from base import BaseHandler
 import shutil
 from datetime import datetime, timedelta
 from model.userfile import userfile
-from settings import alioss,filetypelimit,filesizelimit,isuploadfileoss,userdatapath, downloadpath, downloadurl
+from settings import alioss,isuploadfileoss,downloadpath, siteinfo
 from utils.oss_helper import Alioss
 
 sys.path.append('..')
@@ -68,7 +68,7 @@ class FileHashHandler(BaseHandler):
             field_dict['OSSAccessKeyId'] = self.access_key_id
             # Policy包括超时时间(单位秒)和限制条件condition
             field_dict['policy'] = oss.build_encode_policy(120, [['eq', '$bucket', self.bucket_name],
-                                                                 ['content-length-range', 0, filesizelimit]])
+                                                                 ['content-length-range', 0, siteinfo['filesizelimit']]])
             # 请求签名
             field_dict['signature'] = oss.build_signature(self.access_key_secret, field_dict['policy'])
             # callback，没有回调需求不填该域
@@ -77,8 +77,8 @@ class FileHashHandler(BaseHandler):
                                                         'application/x-www-form-urlencoded')
 
             field_dict['url'] = oss.build_post_url(self.endpoint, self.bucket_name)
-            field_dict['filetypelimit'] = filetypelimit
-            field_dict['filesizelimit'] = filesizelimit
+            field_dict['filetypelimit'] = siteinfo['filetypelimit']
+            field_dict['filesizelimit'] = siteinfo['filesizelimit']
             self.write(json.dumps(field_dict))
             return
         else:

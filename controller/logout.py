@@ -1,11 +1,8 @@
 # -*- coding: UTF-8 -*-
 
 
-import os,os.path,sys
-import json
-import tornado
+import sys
 from base import BaseHandler
-from utils.file_helper import getfiletypename,lock_site_notify
 sys.path.append('..')
 
 class LogoutHandler(BaseHandler):

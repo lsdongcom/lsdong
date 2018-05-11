@@ -57,8 +57,8 @@ class WXLoginHandler(BaseHandler):
             return idx, False
         b_unionid = bytes(unionid, encoding='utf-8')
         filedata = file_read(filepath, oss)
+        filedata = crypto_helper.aes_decrypt(str(filedata, encoding='utf-8'), b_unionid)
         filedata = json.loads(filedata)
-        filedata = crypto_helper.aes_decrypt(filedata, b_unionid)
         if (filedata['userid'] == unionid):
             return idx, True
 
@@ -71,8 +71,8 @@ class WXLoginHandler(BaseHandler):
             if file_exists(newfilepath) is False:
                 return newidx, False
             filedata = file_read(filepath, oss)
+            filedata = crypto_helper.aes_decrypt(str(filedata, encoding='utf-8'), b_unionid)
             filedata = json.loads(filedata)
-            filedata = crypto_helper.aes_decrypt(filedata, b_unionid)
             if (filedata['userid'] == unionid):
                 return idx, True
         print('%s userinfo idx:%s error. please check', usertype, idx)

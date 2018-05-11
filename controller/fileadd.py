@@ -6,14 +6,12 @@ import json
 import tornado
 from base import BaseHandler
 from settings import usertemppath,userdatapath,downloadpath
-import uuid
 import shutil
-from datetime import datetime,timedelta
+from datetime import datetime
 from safeutils import crypto_helper
-from model.userinfo import userinfo
 from model.userfile import userfile
 from utils.file_helper import getfiletypename,lock_site_notify,checkfilename
-from settings import isuploadfilenginx,filesizelimit
+from settings import isuploadfilenginx,siteinfo
 sys.path.append('..')
 
 class FileAddHandler(BaseHandler):
@@ -32,10 +30,10 @@ class FileAddHandler(BaseHandler):
             filetypename = getfiletypename(int(filetype))
             if istxt:
                 self.render('fileaddtxt_' + filetype + '.html', username=user.nickname, filetype=filetype,
-                            filetypename=filetypename, site_notify=site_notify)
+                            filetypename=filetypename, site_notify=site_notify, siteinfo=siteinfo)
             else:
                 self.render('fileadd_' + filetype + '.html', username=user.nickname, filetype=filetype, filetypename=filetypename,
-                            isuploadfilenginx=isuploadfilenginx, filesizelimit=filesizelimit, site_notify=site_notify)
+                            isuploadfilenginx=isuploadfilenginx, site_notify=site_notify, siteinfo=siteinfo)
 
     @tornado.web.authenticated
     def post(self):

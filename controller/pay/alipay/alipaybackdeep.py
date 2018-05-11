@@ -39,7 +39,7 @@ class AlipayBackDeepHandler(BaseHandler):
 
         alipay = Alipay()
         success = alipay.verifyurl(data)
-        if not success:
+        if success is False:
             url = '/filedepth?k=%s&m=%s' % ('1', '支付异常,请重试[02]')
             self.redirect(url)
             return
@@ -47,7 +47,7 @@ class AlipayBackDeepHandler(BaseHandler):
         paystatus = False
         for i in range(10):
             time.sleep(3)
-            if (alipay.query(out_trade_no)):
+            if (alipay.query(out_trade_no) is True):
                 paystatus = True
                 break
 

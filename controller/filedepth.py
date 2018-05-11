@@ -1,19 +1,18 @@
 # -*- coding: UTF-8 -*-
 
-import os,os.path,sys
+import sys
 import re
 import json
 import tornado
 import uuid
-from datetime import datetime,timedelta
+from datetime import datetime
 from base import BaseHandler
-from safeutils import crypto_helper
-from model.userinfo import userinfo
 from model.userfile import userfile
 import numpy as np
 from sdk.alipay_pay import Alipay
 from utils.file_helper import getfiletypename,lock_site_notify
 from utils import file_helper
+from settings import siteinfo
 sys.path.append('..')
 
 
@@ -27,13 +26,12 @@ class FileDepthHandler(BaseHandler):
         message = self.input_default('m', None)
 
         if(self.input_default('k')  is None or not message is None):
-            self.render('filedepth.html', username=user.nickname, deep_number=deep_number, message=message, site_notify=site_notify)
+            self.render('filedepth.html', username=user.nickname, deep_number=deep_number, message=message, site_notify=site_notify, siteinfo=siteinfo)
             return
 
         password = self.get_session('%s_%s' % (user.id, 'auth'))
         if(not password):
-            self.render('filedepth.html', username=user.nickname, deep_number=deep_number, message=message,
-                        site_notify=site_notify)
+            self.render('filedepth.html', username=user.nickname, deep_number=deep_number, message=message, site_notify=site_notify, siteinfo=siteinfo)
             return
 
         self.clear_cookie('%s_%s' % (user.id, 'auth'))
@@ -46,8 +44,7 @@ class FileDepthHandler(BaseHandler):
         ret = self.go_deep_path(user, deep_number, password, '2', filedata)
         if(ret['result'] == 'error'):
             message = ret['info']
-            self.render('filedepth.html', username=user.nickname, deep_number=deep_number, message=message,
-                    site_notify=site_notify)
+            self.render('filedepth.html', username=user.nickname, deep_number=deep_number, message=message, site_notify=site_notify, siteinfo=siteinfo)
 
         self.redirect('/filedepth')
         return
