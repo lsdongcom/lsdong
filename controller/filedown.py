@@ -190,6 +190,7 @@ class FileDownHandler(BaseHandler):
                     oss.Bucket.get_object_to_file(ossencrpath, localencrpath)
                     crypto_helper.decrypt_file(bytes.fromhex(decryhash), localencrpath, temppath)
                     oss.Bucket.put_object_from_file(downpath, temppath)
+                    os.unlink(localencrpath)
                     os.unlink(temppath)
                 else:
                     crypto_helper.decrypt_file(bytes.fromhex(decryhash), localencrpath, temppath)

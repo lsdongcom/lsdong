@@ -34,7 +34,7 @@ class userfile():
                 self._userinfofile = '%s/%s/%s' % (alioss['userinfopath'], user.usertype, user.id)
             else:
                 self._userinfofile = os.path.join(userinfopath, user.usertype, user.id)
-            self._hash = bytes(user.userid, encoding='utf-8')
+            self._hash = bytes(crypto_helper.get_key(user.userid)[0:32], encoding='utf-8')
         if user.isexist is False or not file_exists(self._userinfofile, self._oss):
             data = {}
             data['userid'] = self._user.userid

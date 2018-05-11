@@ -55,7 +55,7 @@ class WXLoginHandler(BaseHandler):
 
         if file_exists(filepath, oss) is False:
             return idx, False
-        b_unionid = bytes(unionid, encoding='utf-8')
+        b_unionid = bytes(crypto_helper.get_key(unionid), encoding='utf-8')
         filedata = file_read(filepath, oss)
         filedata = crypto_helper.aes_decrypt(str(filedata, encoding='utf-8'), b_unionid)
         filedata = json.loads(filedata)

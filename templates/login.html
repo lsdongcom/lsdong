@@ -19,7 +19,7 @@
                     <li class="active"><a href="/">首页</a></li>
                     <li><a href="/help/about.html" >关于</a></li>
                     <li><a href="https://github.com/lsdongcom/lsdong/blob/master/README.md">帮助</a></li>
-                    <li><a href="admin#lsdong.com">联系我们</a></li>
+                    <li><a href="mailto:admin#lsdong.com">联系我们</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">开源<span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -28,7 +28,7 @@
                             <li><a href="https://github.com/lsdongcom/lsdong/blob/master/LICENSE">版权</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="https://github.com/lsdongcom/lsdong/issues">bug 跟踪</a></li>
-                            <li><a href="admin#lsdong.com">加入我们</a></li>
+                            <li><a href="mailto:admin#lsdong.com">加入我们</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -39,6 +39,11 @@
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
     </nav>
+    <div class="container-fluid foot-wrap">
+         <p align="center" style="margin-top: -10px;color:red;">
+            {{ site_notify }}
+        </p>
+    </div>
     <div id="div_broswer_warning" style="text-align:center;display:none">
         <p align="center" style="margin-top: -10px;color:red;font-size: 26px;">
             你正在使用的浏览器版本过低，将不能正常浏览和使用老树洞安全存储，且存在安全隐患，<br>推荐使用
@@ -70,14 +75,17 @@
     <!-- Main component for a primary marketing message or call to action -->
     <div style="text-align:center"><p>使用前请阅读:<u><a class="protocol" href="/help/protocol.html" >老树洞安全存储服务协议</a></p></u></div>
     <div class="jumbotron">
-        <h2>老树洞-开源金融级文件加密存储平台</h2>
+        <h2>老树洞安全存储——免费、开源、全程加密、离散存储</h2>
         <p>
-            目前的加密存储平台，多数建立在“服务器运行环境绝对安全”这样的假设前提下，一旦服务器被攻破，所有资料信息将完全暴露于巨大风险之下。本项目的框架设计建立在“服务器存在安全漏洞但会在24小时内消除”同时
-            “客户访问环境存在一定概率的安全风险”这样的假设条件下，通过更多跨设备校验、安全耦合、区块链去中心化思想提供超高强度金融级安全存储服务……
+            数据的安全存储涉及到三个存储环节：授权登录环境安全不可破解、传输过程安全不可破解、存储文件安全不可破解。老树洞采用微信二维码授权登录模式，物理隔绝了使用设备和授权设备，保证授权登录环境安全不可破解，同时无需记住登录密码，更便捷。老树洞全程采用https加密协议传输数据，最新版的chrome或firefox浏览器，更可增加TLS 1.3加密协议支持，保证传输过程安全不可破解。
         </p>
-        <p>请使用手机微信扫描上面的二维码，马上体验到我们的金融级安全存储服务，如有疑问，您也可以打我们右上角的热线电话或通过在线客服，与我们联系。</p>
         <p>
-            <a class="btn btn-lg btn-primary" href="#" role="button">了解更多安全细节 &raquo;</a>
+            针对服务器端的存储安全，老树洞创新设计基于文件的用户离散加密存储构架，具有六大安全特征，为您的文件数据安全精准护航……
+        </p>
+        <p>
+            微信扫描上方二维码，立刻体验老树洞安全存储服务，如有疑问，请点击右上角在线客服与我们联系。</p>
+        <p>
+            <a class="btn btn-lg btn-primary" href="/help/about.html" role="button">了解更多安全细节 &raquo;</a>
         </p>
     </div>
 
