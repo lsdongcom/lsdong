@@ -35,13 +35,10 @@ class FileDepthHandler(BaseHandler):
             return
 
         self.clear_cookie('%s_%s' % (user.id, 'auth'))
-        if (deep_number == 1):
-            filedata = userfile(user, None, None)
-        else:
-            filepath, filehash = self.get_deep_dict(user, deep_number - 1)
-            filedata = userfile(user, filepath, filehash)
 
-        ret = self.go_deep_path(user, deep_number, password, '2', filedata)
+        userdata = self.get_user_data(user, deep_number)
+
+        ret = self.go_deep_path(user, deep_number, password, '2', userdata)
         if(ret['result'] == 'error'):
             message = ret['info']
             self.render('filedepth.html', username=user.nickname, deep_number=deep_number, message=message, site_notify=site_notify, siteinfo=siteinfo)
@@ -69,12 +66,8 @@ class FileDepthHandler(BaseHandler):
             return
 
         deep_number = self.get_deep_number(user)
-        if (deep_number == 1):
-            filedata = userfile(user, None, None)
-        else:
-            filepath, filehash = self.get_deep_dict(user, deep_number - 1)
-            filedata = userfile(user, filepath, filehash)
-        ret = self.go_deep_path(user, deep_number, password, requesttype, filedata)
+        userdata = self.get_user_data(user, deep_number)
+        ret = self.go_deep_path(user, deep_number, password, requesttype, userdata)
         self.write(json.dumps(ret))
 
     def go_deep_path(self,user,deep_number,password,requesttype,filedata):

@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 
 from controller import index
-from controller import login
 from controller import logout
 from controller import wxlogin
 from controller import filelist
@@ -30,7 +29,6 @@ from controller import help
 
 url = [
     (r'/', index.IndexHandler),
-    (r'/login', login.LoginHandler),
     (r'/wxlogin', wxlogin.WXLoginHandler),
     (r'/logout', logout.LogoutHandler),
     (r'/filedepth', filedepth.FileDepthHandler),

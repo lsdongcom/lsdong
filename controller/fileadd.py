@@ -11,7 +11,8 @@ from datetime import datetime
 from safeutils import crypto_helper
 from model.userfile import userfile
 from utils.file_helper import getfiletypename,lock_site_notify,checkfilename
-from settings import isuploadfilenginx,siteinfo
+from settings import alioss,isuploadfileoss, isuploadfilenginx,siteinfo
+from utils.oss_helper import Alioss
 sys.path.append('..')
 
 class FileAddHandler(BaseHandler):
@@ -116,6 +117,13 @@ class FileAddHandler(BaseHandler):
             os.unlink(encrpath)
 
         crypto_helper.encrypt_file(bytes.fromhex(password), downpath, encrpath)
+
+        if isuploadfileoss is True:
+            oss = Alioss()
+            ossencrpath = '%s/%s' % (alioss['userdatapath'], finalname)
+            oss.Bucket.put_object_from_file(ossencrpath, encrpath)
+            if (os.path.exists(encrpath) is True):
+                os.unlink(encrpath)
 
         if (not user.isexist):
             user.set_isexist(True)

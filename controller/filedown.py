@@ -36,14 +36,10 @@ class FileDownHandler(BaseHandler):
         actiontype = fileinfo['a']
         password = fileinfo['password']
         deep_number = fileinfo['deep_number']
-        if (deep_number == 1):
-            filedata = userfile(user, None, None)
-        else:
-            filepath, filehash = self.get_deep_dict(user, deep_number - 1)
-            filedata = userfile(user, filepath, filehash)
-        filelist = filedata.filelist
+        userdata = self.get_user_data(user, deep_number)
+        userfilelist = userdata.filelist
         data = []
-        for item in filelist:
+        for item in userfilelist:
             if (item[1] == filetype):
                 data.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
 
@@ -70,7 +66,7 @@ class FileDownHandler(BaseHandler):
                 result = alipay.refund(refund_amount=amount, out_trade_no=data['out_trade_no'])
         oss = Alioss()
         if (actiontype == '1'):
-            filedata.del_file(savename)
+            userdata.del_file(savename)
             if isuploadfileoss is True:
                 encrpath = '%s/%s' % (alioss['userdatapath'], savename)
                 oss.Bucket.delete_object(encrpath)
@@ -93,15 +89,10 @@ class FileDownHandler(BaseHandler):
         actiontype = self.input_default('a')
         password = str(self.input_default('p', None)).strip()
         deep_number = self.get_deep_number(user)
-
-        if (deep_number == 1):
-            filedata = userfile(user, None, None)
-        else:
-            filepath, filehash = self.get_deep_dict(user, deep_number - 1)
-            filedata = userfile(user, filepath, filehash)
-        filelist = filedata.filelist
+        userdata = self.get_user_data(user, deep_number)
+        userfilelist = userdata.filelist
         data = []
-        for item in filelist:
+        for item in userfilelist:
             if (item[1] == filetype):
                 data.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
 
@@ -151,7 +142,7 @@ class FileDownHandler(BaseHandler):
             self.write(json.dumps(ret))
             return
         elif(actiontype == '1'):
-            filedata.del_file(savename)
+            userdata.del_file(savename)
             if isuploadfileoss is True:
                 encrpath = '%s/%s' % (alioss['userdatapath'], savename)
                 oss.Bucket.delete_object(encrpath)

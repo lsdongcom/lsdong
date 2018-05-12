@@ -6,7 +6,6 @@ import tornado
 from base import BaseHandler
 from datetime import datetime
 from safeutils import crypto_helper
-from model.userfile import userfile
 from utils.file_helper import lock_site_notify
 from settings import alioss,userdatapath, downloadpath
 from utils.oss_helper import Alioss
@@ -44,13 +43,9 @@ class Upload_OSS_Handler(BaseHandler):
         password = str(password).strip()
         user = self.get_current_user()
         deep_number = self.get_deep_number(user)
-        if (deep_number == 1):
-            filedata = userfile(user, None, None)
-        else:
-            filepath, filehash = self.get_deep_dict(user, deep_number - 1)
-            filedata = userfile(user, filepath, filehash)
-        filelist = filedata.filelist
-        for item in filelist:
+        userdata = self.get_user_data(user, deep_number)
+        userfilelist = userdata.filelist
+        for item in userfilelist:
             if (item[0] == filename and item[1] == filetype and item[3] == filesize):
                 ret = {'result': 'error'}
                 ret['info'] = '同目录下已存在相同文件';
@@ -58,7 +53,7 @@ class Upload_OSS_Handler(BaseHandler):
                 return
 
         passhash = crypto_helper.get_key(password, user.id, filehash, None, False)
-        finalname = filedata.add_file(filename, filetype, filesize, filehash, passhash)
+        finalname = userdata.add_file(filename, filetype, filesize, filehash, passhash)
         password = crypto_helper.get_key(password, user.id)
 
         oss = Alioss()
@@ -69,7 +64,7 @@ class Upload_OSS_Handler(BaseHandler):
         ossencrpath = '%s/%s' % (alioss['userdatapath'], finalname)
         localencrpath = os.path.join(userdatapath, finalname)
         if (oss.exists(ossdownpath) is False):
-            filedata.del_file(finalname)
+            userdata.del_file(finalname)
             ret = {'result': 'error'}
             ret['info'] = '文件上传失败';
             self.write(json.dumps(ret))

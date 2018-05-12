@@ -6,7 +6,6 @@ import tornado
 from base import BaseHandler
 import shutil
 from datetime import datetime, timedelta
-from model.userfile import userfile
 from settings import alioss,isuploadfileoss,downloadpath, siteinfo
 from utils.oss_helper import Alioss
 
@@ -28,13 +27,9 @@ class FileHashHandler(BaseHandler):
         filehash = self.input_default('filehash', None)
         filetype = self.input_default('t', None)
         deep_number = self.get_deep_number(user)
-        if (deep_number == 1):
-            filedata = userfile(user, None, None)
-        else:
-            filepath, filehash = self.get_deep_dict(user, deep_number - 1)
-            filedata = userfile(user, filepath, filehash)
-        filelist = filedata.filelist
-        for item in filelist:
+        userdata = self.get_user_data(user, deep_number)
+        userfilelist = userdata.filelist
+        for item in userfilelist:
             if (item[0] == filename and item[1] == filetype and item[3] == filehash):
                 ret = {'result': 'error'}
                 ret['info'] = '同目录下已存在相同文件';

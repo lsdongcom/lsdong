@@ -11,4 +11,4 @@ class LogoutHandler(BaseHandler):
             self.clear_all_cookies()
         else:
             self.clear_cookie('session_id')
-        self.redirect('/login')
+        self.redirect('/')

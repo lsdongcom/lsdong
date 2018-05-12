@@ -23,18 +23,14 @@ class FileListHandler(BaseHandler):
         filetypename = getfiletypename(int(filetype))
         message = self.input_default('m', None)
         deep_number = self.get_deep_number(user)
-        if (deep_number == 1):
-            filedata = userfile(user, None, None)
-        else:
-            filepath, filehash = self.get_deep_dict(user, deep_number - 1)
-            filedata = userfile(user, filepath, filehash)
-        filelist = filedata.filelist
-        if(len(filelist)<=0):
+        userdata = self.get_user_data(user, deep_number)
+        userfilelist = userdata.filelist
+        if(len(userfilelist)<=0):
             self.render('filelist.html', username=user.nickname, filetype=filetype, filetypename=filetypename,
                         filelist=[], message=message,site_notify=site_notify, siteinfo=siteinfo)
             return
         data = []
-        alist = np.array(filelist)
+        alist = np.array(userfilelist)
         flist = alist[np.where(alist[:, 1] == str(filetype))]
         for item in flist:
             bsize = int(item[2])

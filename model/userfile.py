@@ -130,6 +130,8 @@ class userfile():
         if(self._filelist):
             files = json.loads(self._filelist)
         t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        # 文件名称，文件类型，文件大小，文件哈希校验，密码哈希校验，存储文件名，文件加密版本，文件上传时间
+        # 后续如需升级加密强度，可通过此加密版本实现版本兼容
         files.append([filename, filetype,size, filehash, passwordhash, save_name, 0, t])
         self._size = self._size + size
         self._filelist = json.dumps(files)

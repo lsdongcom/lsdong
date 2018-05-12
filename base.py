@@ -10,7 +10,7 @@ from tornado import escape
 from settings import encryptkey
 from safeutils import crypto_helper
 from model.userinfo import userinfo
-from datetime import datetime,timedelta
+from model.userfile import userfile
 
 
 
@@ -97,3 +97,11 @@ class BaseHandler(tornado.web.RequestHandler):
         if (deepnumber < 1): deepnumber = 1
         session_name = '%s%s' % (user.id, 'session_deep_number')
         deep_number = self.set_session(session_name, str(deepnumber), expires=time.time() + 60 * 60 * 2)
+
+    def get_user_data(self, user, deep_number):
+        if (deep_number == 1):
+            userdata = userfile(user, None, None)
+        else:
+            userpath, userhash = self.get_deep_dict(user, deep_number - 1)
+            userdata = userfile(user, userpath, userhash)
+        return userdata

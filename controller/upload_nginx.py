@@ -71,13 +71,9 @@ class Upload_Nginx_Handler(BaseHandler):
         password = str(password).strip()
         user = self.get_current_user()
         deep_number = self.get_deep_number(user)
-        if (deep_number == 1):
-            filedata = userfile(user, None, None)
-        else:
-            filepath, filehash = self.get_deep_dict(user, deep_number - 1)
-            filedata = userfile(user, filepath, filehash)
-        filelist = filedata.filelist
-        for item in filelist:
+        userdata = self.get_user_data(user, deep_number)
+        userfilelist = userdata.filelist
+        for item in userfilelist:
             if (item[0] == filename and item[1] == filetype and item[3] == filehash):
                 ret = {'result': 'error'}
                 ret['info'] = '同目录下已存在相同文件';
@@ -85,7 +81,7 @@ class Upload_Nginx_Handler(BaseHandler):
                 return
 
         passhash = crypto_helper.get_key(password, user.id, filehash, None, False)
-        finalname = filedata.add_file(filename, filetype, filesize, filehash, passhash)
+        finalname = userdata.add_file(filename, filetype, filesize, filehash, passhash)
         password = crypto_helper.get_key(password, user.id)
         encrpath = os.path.join(userdatapath, finalname)
 
