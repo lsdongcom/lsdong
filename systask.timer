@@ -1,0 +1,16 @@
+# 创建服务
+# sudo cp /www/wwwroot/lsdong/systask.timer /usr/lib/systemd/system
+# sudo systemctl enable systask.timer
+# sudo systemctl start systask.timer
+
+[Unit]
+Description=Runs lsdong file clear task every day
+
+[Timer]
+# Time to wait after booting before we run first time
+OnBootSec=5min
+OnCalendar=*-*-* *:*:30
+Unit=systask.service
+
+[Install]
+WantedBy=multi-user.target

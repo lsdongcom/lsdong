@@ -20,7 +20,7 @@ setting['xsrf_cookies'] = True
 #setting['cookie_secret'] = base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes)
 #print(setting['cookie_secret'])
 setting['cookie_secret'] = ''
-setting['login_url'] = '/login'
+setting['login_url'] = '/'
 setting['template_path'] = os.path.join(setting['root_path'], 'lsdong', 'templates', '')  #os.path.join()拼接地址
 setting['static_path'] = os.path.join(setting['root_path'], 'lsdong', 'static', '')
 
@@ -87,11 +87,9 @@ siteinfo['locknotify'] = '站点即将在1小时后更新,为防止数据丢失�
 siteinfo['filetypelimit'] = ''
 siteinfo['filesizelimit'] = 200*1024*1024
 
-systaskpwd = ''
 lockfile = os.path.join(usertemppath, 'lock')
 adminids = ['']
 #是否启用oss作为文件上传服务器
 isuploadfileoss = True
 #是否启用nginx作为文件上传中间服务器
 isuploadfilenginx = False
-

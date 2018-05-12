@@ -1,11 +1,14 @@
+# 创建服务
 # sudo mkdir /usr/lib/systemd/system
 # sudo cp /www/wwwroot/lsdong/lsdong.service /usr/lib/systemd/system
 # sudo systemctl enable lsdong
 # sudo systemctl start lsdong
+# 管理服务
 # sudo systemctl stop lsdong.service
 # sudo systemctl kill lsdong.service
 # sudo systemctl restart lsdong.service
 # sudo systemctl status lsdong
+
 [Unit]
 Description=lsdong deamon
 Wants=network-online.target

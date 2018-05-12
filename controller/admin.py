@@ -60,6 +60,7 @@ class AdminHandler(BaseHandler):
                 oss.del_dir(deltemppath, temppath, beforetimetemppath)
                 oss.del_dir(deldownpath, downpath, beforetimedownpath)
 
+        print('systask done success')
         self.write('success')
 
 

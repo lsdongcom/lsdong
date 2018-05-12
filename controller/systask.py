@@ -5,18 +5,15 @@ from base import BaseHandler
 from settings import usertemppath,downloadpath
 import shutil
 from datetime import datetime,timedelta
-from settings import isuploadfileoss,alioss,systaskpwd
+from settings import isuploadfileoss,alioss
 from utils.oss_helper import Alioss
 sys.path.append('..')
 
 class SysTaskHandler(BaseHandler):
 
     def get(self):
-        filecleartask = self.input_default('t')
-        if filecleartask != systaskpwd:
-            self.write('ok')
-            return
-
+        remote_ip = self.request.remote_ip
+        if(remote_ip != '127.0.0.1'):return
         now = datetime.now()
         nowdir = now.strftime('%Y%m%d')
         beforetime = now - timedelta(days=1)

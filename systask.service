@@ -1,0 +1,11 @@
+# 创建服务
+# sudo cp /www/wwwroot/lsdong/systask.service /usr/lib/systemd/system
+
+[Unit]
+Description=lsdong file clear task
+
+[Service]
+Type=start
+User=www
+Group=www
+ExecStart=curl http://127.0.0.1:8000/systask
