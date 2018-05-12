@@ -5,7 +5,6 @@
 Description=lsdong file clear task
 
 [Service]
-Type=start
-User=www
-Group=www
-ExecStart=curl http://127.0.0.1:8000/systask
+Type=simple
+# sudo apt-get install curl
+ExecStart=/usr/bin/curl http://127.0.0.1:8000/systask
