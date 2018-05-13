@@ -194,7 +194,7 @@ class FileDownHandler(BaseHandler):
                 return ret
         elif file_exists(beforetimedownpath,oss) is True:
             if isuploadfileoss is True:
-                oss.Bucket.copy_object(beforetimedownpath, downpath)
+                oss.Bucket.copy_object(alioss['bucket'], beforetimedownpath, downpath)
                 oss.Bucket.delete_object(beforetimedownpath)
             else:
                 if (os.path.exists(os.path.join(downloadpath, nowdir, filehash)) is False):
