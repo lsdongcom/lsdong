@@ -33,7 +33,7 @@ mail['from_addr'] = ''
 wechatapi = {}
 wechatapi['appid'] = ''
 wechatapi['secret'] = ''
-wechatapi['redirect_uri'] = 'http%3A%2F%2Fwww.lsdong.com%2Fwxlogin'
+wechatapi['redirect_uri'] = 'https://www.lsdong.com/wxlogin'
 wechatapi['access_token_uri'] ='%s%s%s%s%s' % ( 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=',
 								wechatapi['appid'],'&secret=',wechatapi['secret'],
 								'&code=%s&grant_type=authorization_code')
@@ -63,8 +63,8 @@ alipay = {}
 alipay['debug'] = True
 alipay['appid'] = ''
 alipay['alipay_url'] = 'https://openapi.alipaydev.com/gateway.do'
-alipay['app_return_url'] = 'http://www.lsdong.com/alipayback'
-alipay['app_notify_url'] = 'http://www.lsdong.com/alipaynotify'
+alipay['app_return_url'] = 'https://www.lsdong.com/alipayback'
+alipay['app_notify_url'] = 'https://www.lsdong.com/alipaynotify'
 alipay['app_private_key_path'] = os.path.join(setting['root_path'], 'lsdong', 'certs', 'alipayweb','rsa_private_key.pem')
 alipay['app_public_key_path'] = os.path.join(setting['root_path'], 'lsdong', 'certs', 'alipayweb','alipay_public_key.pem')
 
