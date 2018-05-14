@@ -117,8 +117,8 @@ class FileDownHandler(BaseHandler):
         savename = selectitem[5]
         keyhash = crypto_helper.get_key(password, user.id, filehash, None, False)
 
+        sessionkey = userpay.getSessionKey(user.id, fileindex, filetype, filename)
         if (int(filetype) > 3):
-            sessionkey = userpay.getSessionKey(user.id, fileindex, filetype, filename)
             if(userpay.checkPaySession(self, sessionkey) is False):
                 islock, site_notify = lock_site_notify()
                 if (islock is True):
