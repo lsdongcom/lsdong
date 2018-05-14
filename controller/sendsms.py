@@ -23,7 +23,7 @@ class SendSMSHandler(BaseHandler):
             return
 
         if(aliyun['debug'] is True):
-            self.set_session('telcode', '111111')
+            self.set_session('telcode', '111000')
             ret = {'result': 'ok'}
             self.write(json.dumps(ret))
             return

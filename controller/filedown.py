@@ -44,7 +44,7 @@ class FileDownHandler(BaseHandler):
                 data.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
 
         if (fileindex > len(data)):
-            self.redirect('view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype, actiontype, actiontype, '参数异常'))
+            self.redirect('view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype, actiontype, '未知文件', '参数异常'))
             return
 
         selectitem = data[fileindex]
@@ -60,10 +60,17 @@ class FileDownHandler(BaseHandler):
             if (passwordhash != keyhash):
                 amount = round(float(amount) * 0.8, 2)
                 result = alipay.refund(refund_amount=amount, out_trade_no=data['out_trade_no'])
-                self.redirect('view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype,actiontype,actiontype, '密码错误，请重试'))
+                self.clear_cookie(sessionkey)
+                self.redirect('view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype,actiontype,filename, '密码错误，请重试'))
                 return
             else:
+                self.clear_cookie(sessionkey)
                 result = alipay.refund(refund_amount=amount, out_trade_no=data['out_trade_no'])
+        elif (passwordhash != keyhash):
+            self.clear_cookie(sessionkey)
+            self.redirect('view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype,actiontype,filename, '密码错误，请重试'))
+            return
+
         oss = Alioss()
         if (actiontype == '1'):
             userdata.del_file(savename)
@@ -112,7 +119,7 @@ class FileDownHandler(BaseHandler):
 
         if (int(filetype) > 3):
             sessionkey = userpay.getSessionKey(user.id, fileindex, filetype, filename)
-            if(not userpay.checkPaySession(self, sessionkey)):
+            if(userpay.checkPaySession(self, sessionkey) is False):
                 islock, site_notify = lock_site_notify()
                 if (islock is True):
                     ret = {'result': 'error'}
@@ -136,6 +143,7 @@ class FileDownHandler(BaseHandler):
 
         oss = Alioss()
         if(passwordhash != keyhash):
+            self.clear_cookie(sessionkey)
             ret = {'result': 'error'}
             ret['code'] = '0';
             ret['info'] = '';

@@ -16,7 +16,7 @@ class CodeCheckHandler(BaseHandler):
             sessioncode = self.get_session('mailcode')
         else:
             sessioncode = self.get_session('telcode')
-        if (code == sessioncode):
+        if (code in sessioncode):
             ret = {'result': 'ok'}
             self.write(json.dumps(ret))
         elif (not code):
@@ -25,6 +25,6 @@ class CodeCheckHandler(BaseHandler):
             self.write(json.dumps(ret))
         else:
             ret = {'result': 'error'}
-            ret['info'] = '校验码错误,请重新输入';
+            ret['info'] = '校验码错误,请重新输入'
             self.write(json.dumps(ret))
 
