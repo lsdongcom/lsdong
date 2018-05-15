@@ -19,7 +19,7 @@ class CodeCheckHandler(BaseHandler):
 
         if sessioncode is None:
             ret = {'result': 'error'}
-            ret['info'] = '验证码记录获取失败,请重新获取验证码';
+            ret['info'] = '验证码超时或不存在,请重新获取验证码';
             self.write(json.dumps(ret))
         elif (code in sessioncode):
             ret = {'result': 'ok'}
