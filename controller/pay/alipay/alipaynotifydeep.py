@@ -46,7 +46,7 @@ class AlipayNotifyDeepHandler(BaseHandler):
         paystatus = False
         for i in range(10):
             time.sleep(3)
-            if (alipay.query(out_trade_no)):
+            if (alipay.query(out_trade_no) is True):
                 paystatus = True
                 break
 

@@ -40,7 +40,7 @@ wechatapi['access_token_uri'] ='%s%s%s%s%s' % ( 'https://api.weixin.qq.com/sns/o
 wechatapi['access_userinfo_uri'] = 'https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s'
 
 aliyun = {}
-aliyun['debug'] = True
+aliyun['debug'] = False
 aliyun['ACCESS_KEY_ID'] = ""
 aliyun['ACCESS_KEY_SECRET'] = ""
 
@@ -60,9 +60,11 @@ downloadurl = '/%s/%s' % ('static', 'downloadfiles')
 downloadpath = os.path.join(setting['root_path'], 'lsdong','downloadfiles', '')
 
 alipay = {}
-alipay['debug'] = True
+alipay['debug'] = False
 alipay['appid'] = ''
-alipay['alipay_url'] = 'https://openapi.alipaydev.com/gateway.do'
+alipay['app_dev_id'] = ''
+alipay['alipay_url'] = 'https://openapi.alipay.com/gateway.do'
+alipay['alipay_dev_url'] = 'https://openapi.alipaydev.com/gateway.do'
 alipay['app_return_url'] = 'https://www.lsdong.com/alipayback'
 alipay['app_notify_url'] = 'https://www.lsdong.com/alipaynotify'
 alipay['app_private_key_path'] = os.path.join(setting['root_path'], 'lsdong', 'certs', 'alipayweb','rsa_private_key.pem')
@@ -71,8 +73,8 @@ alipay['app_public_key_path'] = os.path.join(setting['root_path'], 'lsdong', 'ce
 alioss = {}
 alioss['AccessKeyId'] = ''
 alioss['AccessKeySecret'] = ''
-alioss['bucket'] = ''
-alioss['endpoint'] = ''
+alioss['bucket'] = 'lsdongcom'
+alioss['endpoint'] = 'https://oss-cn-beijing.aliyuncs.com'
 alioss['host'] = 'https://%s.%s' % (alioss['bucket'], alioss['endpoint']);
 alioss['userinfopath'] = 'userinfofiles'
 alioss['userdatapath'] = 'userdatafiles'

@@ -91,6 +91,6 @@ class Alipay():
 
     def refundquery(self,out_trade_no):
         result = self._alipay.api_alipay_trade_fastpay_refund_query(out_request_no=out_trade_no,out_trade_no=out_trade_no)
-        if result["code"] == "10000":
+        if result["code"] == "10000" and 'refund_amount' in result:
             return True
         return False

@@ -37,7 +37,7 @@ class AlipayNotifyHandler(BaseHandler):
             return
 
         out_trade_no = data['out_trade_no']
-        amount = data['amount']
+        amount = data['total_amount']
         if alipay.refundquery(out_trade_no) is True:
             return
 

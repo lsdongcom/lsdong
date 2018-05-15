@@ -36,18 +36,29 @@ def updatePaySession(web_handler, sessionkey):
         fileinfo['status'] = '1'
         web_handler.set_session(sessionkey, json.dumps(fileinfo), expires=time.time() + 60 * 60 * 24)
 
-def checkPaySession(web_handler, sessionkey):
+def checkPaySession(web_handler, sessionkey, password=None):
     sessioncontent = web_handler.get_session(sessionkey)
     if (sessioncontent):
         fileinfo = json.loads(sessioncontent)
-        if (fileinfo['status'] == '1'):
-            return True
-        payno = fileinfo['payno']
         alipay = Alipay()
-        if alipay.query(payno) is True:
-            fileinfo['status'] = '1'
-            web_handler.set_session(sessionkey, json.dumps(fileinfo), expires=time.time() + 60 * 60 * 24)
-            return True
+        payno = fileinfo['payno']
+        if password is None:
+            if (fileinfo['status'] == '1'):
+                return True
+            if alipay.query(payno) is True:
+                fileinfo['status'] = '1'
+                web_handler.set_session(sessionkey, json.dumps(fileinfo), expires=time.time() + 60 * 60 * 24)
+                return True
+        else:
+            ppwd = fileinfo['password']
+            if(ppwd != password):
+                return False
+            if fileinfo['status'] == '1':
+                return True
+            if alipay.query(payno) is True:
+                fileinfo['status'] = '1'
+                web_handler.set_session(sessionkey, json.dumps(fileinfo), expires=time.time() + 60 * 60 * 24)
+                return True
     return False
 
 def getPayAmount(filetype,password):

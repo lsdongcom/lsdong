@@ -16,10 +16,16 @@ class FileViewHandler(BaseHandler):
         sessionkey = self.input_default('k')
         if (sessionkey):
             fileinfo = userpay.getPaySession(self, sessionkey)
-            fileindex = int(fileinfo['i'])
-            filetype = fileinfo['t']
-            actiontype = fileinfo['a']
-            filename = fileinfo['name']
+            if not fileinfo:
+                fileindex = '999999'
+                filetype = '4'
+                actiontype = '0'
+                filename = '未知文件'
+            else:
+                fileindex = int(fileinfo['i'])
+                filetype = fileinfo['t']
+                actiontype = fileinfo['a']
+                filename = fileinfo['name']
         else:
             fileindex = self.input_default('i')
             filetype = self.input_default('t')

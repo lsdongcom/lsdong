@@ -59,13 +59,13 @@ class FileDownHandler(BaseHandler):
         if alipay.refundquery(payno) is False:
             if (passwordhash != keyhash):
                 amount = round(float(amount) * 0.8, 2)
-                result = alipay.refund(refund_amount=amount, out_trade_no=data['out_trade_no'])
+                result = alipay.refund(refund_amount=amount, out_trade_no=payno)
                 self.clear_cookie(sessionkey)
                 self.redirect('view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype,actiontype,filename, '密码错误，请重试'))
                 return
             else:
                 self.clear_cookie(sessionkey)
-                result = alipay.refund(refund_amount=amount, out_trade_no=data['out_trade_no'])
+                result = alipay.refund(refund_amount=amount, out_trade_no=payno)
         elif (passwordhash != keyhash):
             self.clear_cookie(sessionkey)
             self.redirect('view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype,actiontype,filename, '密码错误，请重试'))
@@ -119,7 +119,7 @@ class FileDownHandler(BaseHandler):
 
         sessionkey = userpay.getSessionKey(user.id, fileindex, filetype, filename)
         if (int(filetype) > 3):
-            if(userpay.checkPaySession(self, sessionkey) is False):
+            if(userpay.checkPaySession(self, sessionkey, password) is False):
                 islock, site_notify = lock_site_notify()
                 if (islock is True):
                     ret = {'result': 'error'}
