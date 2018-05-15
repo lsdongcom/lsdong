@@ -12,7 +12,9 @@ from safeutils import crypto_helper
 
 alipay_debug = alipay['debug']
 alipay_id = alipay['appid']
+alipay_div_id = alipay['app_dev_id']
 alipay_url = alipay['alipay_url']
+alipay_dev_url = alipay['alipay_dev_url']
 app_private_key_path = alipay['app_private_key_path']
 app_public_key_path = alipay['app_public_key_path']
 app_return_url = alipay['app_return_url']
@@ -20,18 +22,21 @@ app_notify_url = alipay['app_notify_url']
 
 class Alipay():
     def __init__(self):
+        if alipay_debug is True:
+            self._appid = alipay_div_id
+            self._gateway = alipay_dev_url
+        else:
+            self._appid = alipay_id
+            self._gateway = alipay_url
+
         self._alipay = AliPay(
-            appid=alipay_id,
+            appid=self._appid,
             app_notify_url=None,  # 默认回调url
             app_private_key_path=app_private_key_path,
             alipay_public_key_path=app_public_key_path,
             sign_type="RSA2",  # RSA 或者 RSA2
             debug=alipay_debug  # 默认False
         )
-        if alipay_debug is True:
-            self._gateway = "https://openapi.alipaydev.com/gateway.do"
-        else:
-            self._gateway = "https://openapi.alipay.com/gateway.do"
 
     def getpaycheckurl(self,sessionkey, out_trade_no, subject, total_amount, payhash, filehash, passwordhash):
         returnurl = '%s/%s' % (app_return_url, sessionkey)
@@ -80,14 +85,12 @@ class Alipay():
     def refund(self, refund_amount, out_trade_no):
         result = self._alipay.api_alipay_trade_refund(refund_amount=refund_amount, out_trade_no=out_trade_no,
                                                       trade_no=None, out_request_no=out_trade_no)
-        print('refund', result)
         if result["code"] == "10000":
             return True
         return False
 
     def refundquery(self,out_trade_no):
         result = self._alipay.api_alipay_trade_fastpay_refund_query(out_request_no=out_trade_no,out_trade_no=out_trade_no)
-        print('refundquery',result)
         if result["code"] == "10000":
             return True
         return False

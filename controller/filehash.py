@@ -50,7 +50,7 @@ class FileHashHandler(BaseHandler):
                 beforetimedir = beforetime.strftime('%Y%m%d')
                 beforetimedownpath = '%s/%s/%s/%s' % (alioss['downloadpath'], beforetimedir, filehash, filename)
                 if (oss.exists(beforetimedownpath) is True):
-                    oss.Bucket.copy_object(beforetimedownpath, downpath)
+                    oss.Bucket.copy_object(alioss['bucket'], beforetimedownpath, downpath)
                     oss.Bucket.delete_object(beforetimedownpath)
                     ret = {'result': '0'}
                     self.write(json.dumps(ret))

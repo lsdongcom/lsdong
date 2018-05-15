@@ -44,7 +44,7 @@ def checkPaySession(web_handler, sessionkey):
             return True
         payno = fileinfo['payno']
         alipay = Alipay()
-        if alipay.query(payno):
+        if alipay.query(payno) is True:
             fileinfo['status'] = '1'
             web_handler.set_session(sessionkey, json.dumps(fileinfo), expires=time.time() + 60 * 60 * 24)
             return True
