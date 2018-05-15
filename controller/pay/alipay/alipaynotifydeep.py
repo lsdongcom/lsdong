@@ -60,7 +60,7 @@ class AlipayNotifyDeepHandler(BaseHandler):
         if(not timestamp or not amount):
             return
         timeout = datetime.now() - datetime.strptime(timestamp,'%Y-%m-%d %H:%M:%S')
-        if (timeout > timedelta(hours=2) ):
+        if (timeout > timedelta(minutes=30) ):
             return
 
         bodyhashconfim = crypto_helper.get_key(amount, userid, code, out_trade_no)

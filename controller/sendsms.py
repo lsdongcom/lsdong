@@ -41,6 +41,6 @@ class SendSMSHandler(BaseHandler):
         else:
             print(status)
             ret = {'result': 'error'}
-            ret['info'] = '短信发送失败，请稍候重新获取';
+            ret['info'] = '短信发送失败，请稍候重新验证码';
             self.write(json.dumps(ret))
 

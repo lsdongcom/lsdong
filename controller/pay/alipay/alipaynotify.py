@@ -11,6 +11,7 @@ from utils import  tool
 from sdk.alipay_pay import Alipay
 from safeutils import crypto_helper
 from model import userpay
+from settings import encryptkey
 sys.path.append('../../')
 
 class AlipayNotifyHandler(BaseHandler):
@@ -18,13 +19,13 @@ class AlipayNotifyHandler(BaseHandler):
     def check_xsrf_cookie(self):
         pass
 
-    def get(self, payhash, filehash, passwordhash):
-            self.paycheck(payhash, filehash, passwordhash)
+    def get(self, retcontent):
+            self.paycheck(retcontent)
 
-    def post(self, payhash, filehash, passwordhash):
-            self.paycheck(payhash, filehash, passwordhash)
+    def post(self, retcontent):
+            self.paycheck(retcontent)
 
-    def paycheck(self, payhash, filehash, passwordhash):
+    def paycheck(self, retcontent):
         self.write("success")
         keys = self.request.arguments.keys()
         data = {}
@@ -41,11 +42,15 @@ class AlipayNotifyHandler(BaseHandler):
         if alipay.refundquery(out_trade_no) is True:
             return
 
-        keyhash = crypto_helper.get_key(payhash, filehash, None, None, False)
-        nlen = len(keyhash) - len(passwordhash)
-        keyhash = ''.join(list(keyhash)[nlen:])
-        if (passwordhash != keyhash):
-            amount = round(float(amount) * 0.8, 2)
+        retkey = crypto_helper.get_key(str(amount), out_trade_no, str(encryptkey, encoding='utf-8'))
+        retkey = ''.join(list(retkey)[:32])
+        retkey = bytes(retkey, encoding='utf-8')
+        retcontent = crypto_helper.aes_decrypt(retcontent, retkey)
+        retcontent = json.loads(retcontent)
+
+        if ('status' in retcontent and retcontent['status'] == '1'):
             result = alipay.refund(refund_amount=amount, out_trade_no=out_trade_no)
         else:
-            result = alipay.refund(refund_amount=amount,out_trade_no=out_trade_no)
+            amount = round(float(amount) * 0.8, 2)
+            result = alipay.refund(refund_amount=amount, out_trade_no=out_trade_no)
+

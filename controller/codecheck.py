@@ -16,12 +16,13 @@ class CodeCheckHandler(BaseHandler):
             sessioncode = self.get_session('mailcode')
         else:
             sessioncode = self.get_session('telcode')
-        if (code in sessioncode):
-            ret = {'result': 'ok'}
-            self.write(json.dumps(ret))
-        elif (not code):
+
+        if sessioncode is None:
             ret = {'result': 'error'}
-            ret['info'] = '客户端session读取失败,请刷新页面后重试';
+            ret['info'] = '验证码记录获取失败,请重新获取验证码';
+            self.write(json.dumps(ret))
+        elif (code in sessioncode):
+            ret = {'result': 'ok'}
             self.write(json.dumps(ret))
         else:
             ret = {'result': 'error'}

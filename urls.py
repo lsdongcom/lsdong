@@ -44,7 +44,7 @@ url = [
     (r'/sms', sendsms.SendSMSHandler),
     (r'/codecheck', codecheck.CodeCheckHandler),
     (r'/alipayback/(.*)', alipayback.AlipayBackHandler),
-    (r'/alipaynotify/(.*)/(.*)/(.*)', alipaynotify.AlipayNotifyHandler),
+    (r'/alipaynotify/(.*)', alipaynotify.AlipayNotifyHandler),
     (r'/alipaybackdeep/(.*)/(.*)/(.*)', alipaybackdeep.AlipayBackDeepHandler),
     (r'/alipaynotifydeep/(.*)/(.*)/(.*)', alipaynotifydeep.AlipayNotifyDeepHandler),
     (r'/aliossnotify', aliossnotify.Alioss_Notify_Handler),

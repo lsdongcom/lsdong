@@ -11,7 +11,7 @@ from safeutils import crypto_helper
 from model.userfile import userfile
 from  model import userpay
 from utils.file_helper import lock_site_notify
-from settings import alioss,isuploadfileoss, userdatapath,downloadpath,downloadurl
+from settings import alioss,isuploadfileoss, userdatapath,downloadpath,downloadurl,encryptkey
 from utils.file_helper import file_exists
 from sdk.alipay_pay import Alipay
 from utils.oss_helper import Alioss
@@ -134,8 +134,20 @@ class FileDownHandler(BaseHandler):
                 userpay.setPaySession(self, sessionkey,trade_no, user.id, fileindex, filetype, actiontype, filename, deep_number,
                                       password)
                 amount = userpay.getPayAmount(filetype, password)
-                payhash = crypto_helper.get_key(password, user.id, None, None, False)
-                payurl = Alipay().getpaycheckurl(sessionkey, trade_no, subject, amount, payhash, filehash, passwordhash)
+                if (len(filehash) <= 32):
+                    retcontent = {'filehash': filehash}
+                else:
+                    retcontent = {'filehash': ''.join(list(filehash)[:32])}
+                if (passwordhash == keyhash):
+                    retcontent['status'] = '1';
+                else:
+                    retcontent['status'] = '0';
+                retkey = crypto_helper.get_key(str(amount), trade_no, str(encryptkey, encoding='utf-8'))
+                retkey = ''.join(list(retkey)[:32])
+                retkey = bytes(retkey, encoding='utf-8')
+                retcontent = crypto_helper.aes_encrypt(json.dumps(retcontent), retkey)
+
+                payurl = Alipay().getpaycheckurl(sessionkey, trade_no, subject, amount, retcontent)
                 ret = {'result': 'pay'}
                 ret['url'] = payurl;
                 self.write(json.dumps(ret))

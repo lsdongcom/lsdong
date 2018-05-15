@@ -38,14 +38,9 @@ class Alipay():
             debug=alipay_debug  # 默认False
         )
 
-    def getpaycheckurl(self,sessionkey, out_trade_no, subject, total_amount, payhash, filehash, passwordhash):
+    def getpaycheckurl(self,sessionkey, out_trade_no, subject, total_amount, retcontent):
         returnurl = '%s/%s' % (app_return_url, sessionkey)
-        notify_url = '%s/%s/%s/%s' % (app_notify_url, payhash, filehash, passwordhash)
-        if (len(notify_url) > 190):
-            nlen = len(notify_url) - 190
-            passwordhash = ''.join(list(passwordhash)[nlen:])
-            notify_url = '%s/%s/%s/%s' % (app_notify_url, payhash, filehash, passwordhash)
-
+        notify_url = '%s/%s' % (app_notify_url, retcontent)
         order_string = self._alipay.api_alipay_trade_page_pay(
             out_trade_no=out_trade_no,
             total_amount=total_amount,
