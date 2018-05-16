@@ -71,6 +71,40 @@ class FileDepthHandler(BaseHandler):
         self.write(json.dumps(ret))
 
     def go_deep_path(self,user,deep_number,password,requesttype,filedata):
+        if (deep_number >= 50):
+            ret = {'result': 'error'}
+            ret['code'] = '0'
+            ret['info'] = '非常抱歉,目前嵌套层最高只能创建到50层'
+            return ret
+
+        filelist = filedata.filelist
+        openauth = file_helper.deep_auth_check(user.id, '1')
+        if (openauth is False):
+            if (len(filelist) <= 0):
+                ret = {'result': 'error'}
+                ret['code'] = '1'
+                ret['info'] = '非常抱歉,您还没有使用本层任何加密方式,无法开启下一嵌套层,您可付款不低于1分钱的任意金额解除此类限制,付款后24小时内有效,如需解锁请确认后再次提交'
+                return ret
+
+            alist = np.array(filelist)
+            for i in range(5):
+                l = len(alist[np.where(alist[:, 1] == str(i + 1))])
+                if (l <= 0):
+                    filetypename = getfiletypename(i + 1)
+                    ret = {'result': 'error'}
+                    ret['code'] = '1'
+                    ret['info'] = '非常抱歉,您还没有使用本层“%s”的加密方式,无法开启下一嵌套层,您可付款不低于1分钱的任意金额解除此类限制,付款后24小时内有效,如需解锁请确认后再次提交' % (
+                        filetypename)
+                    return ret
+
+        topdeep = int((deep_number - deep_number % 5) / 5 + 2)
+        deepauth = file_helper.deep_auth_check(user.id, str(topdeep))
+        if (deep_number >= 5 and deepauth is False):
+            ret = {'result': 'error'}
+            ret['code'] = '2'
+            ret['info'] = '非常抱歉,目前仅开放前5层嵌套层,您可付款1元解除后续5层限制,付款后24小时内有效,存储的文件长期有效,如需解锁请确认后再次提交'
+            return ret
+
         if (filedata.deep_path):
             deeppath, deephash = filedata.get_deep_path(password)
             if (not deeppath):
@@ -80,47 +114,14 @@ class FileDepthHandler(BaseHandler):
                 return ret
             self.set_deep_dict(user, deep_number, deeppath, deephash)
         else:
-            if (deep_number >= 50):
-                ret = {'result': 'error'}
-                ret['code'] = '0'
-                ret['info'] = '非常抱歉,目前嵌套层最高只能创建到50层'
-                return ret
             if (requesttype=='1'):
                 ret = {'result': '?'}
                 return ret
             else:
-                filelist = filedata.filelist
-                openauth = file_helper.deep_auth_check(user.id,'1')
-                if(not openauth):
-                    if (len(filelist) <= 0):
-                        ret = {'result': 'error'}
-                        ret['code'] = '1'
-                        ret['info'] = '非常抱歉,您还没有使用本层任何加密方式,无法开启下一嵌套层,您可付款不低于1分钱的任意金额解除此类限制,付款后24小时内有效,如需解锁请确认后再次提交'
-                        return ret
-
-                    alist = np.array(filelist)
-                    for i in range(5):
-                        l = len(alist[np.where(alist[:, 1] == str(i + 1))])
-                        if (l <= 0):
-                            filetypename = getfiletypename(i + 1)
-                            ret = {'result': 'error'}
-                            ret['code'] = '1'
-                            ret['info'] = '非常抱歉,您还没有使用本层“%s”的加密方式,无法开启下一嵌套层,您可付款不低于1分钱的任意金额解除此类限制,付款后24小时内有效,如需解锁请确认后再次提交' % (
-                            filetypename)
-                            return ret
-                topdeep =  int((deep_number - deep_number % 5) / 5 + 2)
-                deepauth = file_helper.deep_auth_check(user.id, str(topdeep))
-                if (deep_number >= 5 and not deepauth):
-                    ret = {'result': 'error'}
-                    ret['code'] = '2'
-                    ret['info'] = '非常抱歉,目前仅开放前5层嵌套层,您可付款1元解除后续5层限制,付款后24小时内有效,存储的文件长期有效,如需解锁请确认后再次提交'
-                    return ret
-
                 deeppath, deephash = filedata.create_deep_path(password)
                 self.set_deep_dict(user, deep_number, deeppath, deephash)
 
         self.set_deep_number(user, deep_number + 1)
-
         ret = {'result': 'ok'}
         return ret
 
