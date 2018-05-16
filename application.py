@@ -12,7 +12,7 @@ from settings import setting,isuploadfileoss
 
 # logging.basicConfig(level=logging.DEBUG,
 # 					filemode='a+',
-# 					filename='{0}/starcloud.log'.format(os.path.join(setting['root_path'],'log')),
+# 					filename='{0}/lsdong.log'.format(os.path.join(setting['root_path'],'log')),
 # 					format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
 # 					datefmt='%a, %d %b %Y %H:%M:%S',
 # 					)
