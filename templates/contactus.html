@@ -1,0 +1,55 @@
+{% extends 'base.html'%}
+{% block RenderBody %}
+
+<div class="container">
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">老树洞</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">首页</a></li>
+                    <li><a href="/help/about.html" >关于老树洞</a></li>
+                    <li><a href="/help/aboutus.html" >关于我们</a></li>
+                    <li class="active"><a href="/help/contactus.html" >联系我们</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">开源<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a target="_blank" href="https://github.com/lsdongcom/lsdong">源代码</a></li>
+                            <li><a target="_blank" href="https://github.com/lsdongcom/lsdong/blob/master/README.md">文档</a></li>
+                            <li><a target="_blank" href="https://github.com/lsdongcom/lsdong/blob/master/LICENSE">版权</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a target="_blank" href="https://github.com/lsdongcom/lsdong/issues">bug 跟踪</a></li>
+                            <li><a href="https://github.com/lsdongcom/lsdong/graphs/contributors">加入我们</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
+                    <li><a href="{{ siteinfo['onlineservice_url'] }}" target="_blank">客服在线</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+    </nav>
+    <!-- Main component for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <h2>如有任何建议或意见，请与我们联系：</h2>
+        <p>
+            Q   Q：1273709953
+        </p>
+        <p>
+            邮 箱：admin#lsdong.com
+        </p>
+    </div>
+
+</div> <!-- /container -->
+
+{% end %}
