@@ -16,15 +16,11 @@ sys.path.append('../../')
 
 class AlipayBackDeepHandler(BaseHandler):
 
-    def check_xsrf_cookie(self):
-        pass
-
+    @tornado.web.authenticated
     def get(self, userid, code, bodyhash):
-            self.paycheck(userid, code, bodyhash)
+        self.paycheck(userid, code, bodyhash)
 
-    def post(self, userid, code, bodyhash):
-            self.paycheck(userid, code, bodyhash)
-
+    @tornado.gen.engine
     def paycheck(self, userid, code, bodyhash):
         out_trade_no = self.input_default('out_trade_no', None)
         if (not out_trade_no):
@@ -46,14 +42,14 @@ class AlipayBackDeepHandler(BaseHandler):
 
         paystatus = False
         for i in range(10):
-            time.sleep(3)
-            if (alipay.query(out_trade_no) is True):
+            if alipay.query(out_trade_no) is True:
                 paystatus = True
                 break
+            yield tornado.gen.sleep(3)
 
         # order is not paid in 30s , cancel this order
         if paystatus is False:
-            alipay.api_alipay_trade_cancel(out_trade_no=out_trade_no)
+            alipay.tradecancel(out_trade_no=out_trade_no)
             url = '/filedepth?k=%s&m=%s' % ('1', '支付异常,请重试[03]')
             self.redirect(url)
             return

@@ -54,7 +54,7 @@ class Alipay():
     def getpaydeepurl(self, out_trade_no, subject, total_amount, userid, code):
         bodyhash = crypto_helper.get_key(str(total_amount), userid, str(code), out_trade_no)
         returnurl = '%s%s/%s/%s/%s' % (app_return_url, 'deep', userid, code, bodyhash)
-        notify_url = '%s%s/%s/%s/%s' % (app_return_url, 'deep', userid, code, bodyhash)
+        notify_url = '%s%s/%s/%s/%s' % (app_notify_url, 'deep', userid, code, bodyhash)
         order_string = self._alipay.api_alipay_trade_page_pay(
             out_trade_no=out_trade_no,
             total_amount=total_amount,
@@ -87,5 +87,17 @@ class Alipay():
     def refundquery(self,out_trade_no):
         result = self._alipay.api_alipay_trade_fastpay_refund_query(out_request_no=out_trade_no,out_trade_no=out_trade_no)
         if result["code"] == "10000" and 'refund_amount' in result:
+            return True
+        return False
+
+    def refundallquery(self,out_trade_no):
+        result = self._alipay.api_alipay_trade_fastpay_refund_query(out_request_no=out_trade_no,out_trade_no=out_trade_no)
+        if result["code"] == "10000" and 'refund_amount' in result and result["refund_amount"] == result["total_amount"]:
+            return True
+        return False
+
+    def tradecancel(self,out_trade_no):
+        result = self._alipay.api_alipay_trade_cancel(out_trade_no=out_trade_no)
+        if result["code"] == "10000":
             return True
         return False

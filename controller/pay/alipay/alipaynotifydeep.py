@@ -43,16 +43,7 @@ class AlipayNotifyDeepHandler(BaseHandler):
         if success is False:
             return
 
-        paystatus = False
-        for i in range(10):
-            time.sleep(3)
-            if (alipay.query(out_trade_no) is True):
-                paystatus = True
-                break
-
-        # order is not paid in 30s , cancel this order
-        if paystatus is False:
-            alipay.api_alipay_trade_cancel(out_trade_no=out_trade_no)
+        if alipay.query(out_trade_no) is False:
             return
 
         timestamp = self.input_default('timestamp')

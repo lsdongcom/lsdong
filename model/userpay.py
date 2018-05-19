@@ -45,7 +45,7 @@ def checkPaySession(web_handler, sessionkey, password=None):
         if password is None:
             if (fileinfo['status'] == '1'):
                 return True
-            if alipay.query(payno) is True:
+            if alipay.query(payno) is True or alipay.refundallquery(payno) is True:
                 fileinfo['status'] = '1'
                 web_handler.set_session(sessionkey, json.dumps(fileinfo), expires=time.time() + 60 * 60 * 24)
                 return True
@@ -55,7 +55,7 @@ def checkPaySession(web_handler, sessionkey, password=None):
                 return False
             if fileinfo['status'] == '1':
                 return True
-            if alipay.query(payno) is True:
+            if alipay.query(payno) is True or alipay.refundallquery(payno) is True:
                 fileinfo['status'] = '1'
                 web_handler.set_session(sessionkey, json.dumps(fileinfo), expires=time.time() + 60 * 60 * 24)
                 return True

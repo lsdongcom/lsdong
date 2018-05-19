@@ -16,6 +16,7 @@ sys.path.append('../../')
 class AlipayBackHandler(BaseHandler):
 
     @tornado.web.authenticated
+    @tornado.gen.engine
     def get(self,sessionkey):
         out_trade_no = self.input_default('out_trade_no', None)
         if(not out_trade_no):
@@ -26,14 +27,14 @@ class AlipayBackHandler(BaseHandler):
         alipay = Alipay()
         paystatus = False
         for i in range(10):
-            time.sleep(3)
-            if (alipay.query(out_trade_no) is True):
+            if alipay.query(out_trade_no) is True or alipay.refundallquery(out_trade_no) is True:
                 paystatus = True
                 break
+            yield tornado.gen.sleep(3)
 
         # order is not paid in 30s , cancel this order
         if paystatus is False:
-            alipay.api_alipay_trade_cancel(out_trade_no=out_trade_no)
+            alipay.tradecancel(out_trade_no=out_trade_no)
             url = '/view?k=%s&m=%s' % (sessionkey, '支付失败,请重试')
             self.redirect(url)
             return

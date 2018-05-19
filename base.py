@@ -40,7 +40,9 @@ class BaseHandler(tornado.web.RequestHandler):
         else:
             return None
 
-    def set_session(self, name,value, expires=time.time() + 60 * 30):
+    def set_session(self, name,value, expires=None):
+        if expires is None:
+            expires = time.time() + 60 * 30
         self.set_secure_cookie(name, crypto_helper.aes_encrypt(value, encryptkey),expires=expires)
 
     def get_current_user(self):

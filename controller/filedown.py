@@ -58,13 +58,17 @@ class FileDownHandler(BaseHandler):
         alipay = Alipay()
         if alipay.refundquery(payno) is False:
             if (passwordhash != keyhash):
-                amount = round(float(amount) * 0.8, 2)
-                result = alipay.refund(refund_amount=amount, out_trade_no=payno)
+                amount = float(amount)
+                if (amount <= 0.02):
+                    amount = amount - 0.01
+                else:
+                    amount = round(amount * 0.8, 2)
+                if (amount > 0):
+                    result = alipay.refund(refund_amount=amount, out_trade_no=payno)
                 self.clear_cookie(sessionkey)
                 self.redirect('view?i=%s&t=%s&a=%s&name=%s&m=%s' % (fileindex, filetype,actiontype,filename, '密码错误，请重试'))
                 return
             else:
-                self.clear_cookie(sessionkey)
                 result = alipay.refund(refund_amount=amount, out_trade_no=payno)
         elif (passwordhash != keyhash):
             self.clear_cookie(sessionkey)

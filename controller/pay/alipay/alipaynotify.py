@@ -25,6 +25,7 @@ class AlipayNotifyHandler(BaseHandler):
     def post(self, retcontent):
             self.paycheck(retcontent)
 
+    @tornado.gen.engine
     def paycheck(self, retcontent):
         self.write("success")
         keys = self.request.arguments.keys()
@@ -39,6 +40,10 @@ class AlipayNotifyHandler(BaseHandler):
 
         out_trade_no = data['out_trade_no']
         amount = data['total_amount']
+
+        if alipay.query(out_trade_no) is False:
+            return
+
         if alipay.refundquery(out_trade_no) is True:
             return
 
@@ -49,8 +54,14 @@ class AlipayNotifyHandler(BaseHandler):
         retcontent = json.loads(retcontent)
 
         if ('status' in retcontent and retcontent['status'] == '1'):
+            yield tornado.gen.sleep(30)
             result = alipay.refund(refund_amount=amount, out_trade_no=out_trade_no)
-        else:
-            amount = round(float(amount) * 0.8, 2)
-            result = alipay.refund(refund_amount=amount, out_trade_no=out_trade_no)
+            return
 
+        amount = float(amount)
+        if (amount <= 0.02):
+            amount = amount - 0.01
+        else:
+            amount = round(amount * 0.8, 2)
+        if (amount > 0):
+            result = alipay.refund(refund_amount=amount, out_trade_no=out_trade_no)
