@@ -9,7 +9,9 @@ Description=Runs lsdong file clear task every day
 
 [Timer]
 OnBootSec=30min
-OnCalendar=*-*-* 5:*:*
+OnCalendar=*-*-* 5:00:00
+AccuracySec=15min
+RandomizedDelaySec=15min
 Unit=systask.service
 
 [Install]

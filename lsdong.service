@@ -8,6 +8,7 @@
 # sudo systemctl kill lsdong.service
 # sudo systemctl restart lsdong.service
 # sudo systemctl status lsdong
+# journalctl --since=yesterday -u lsdong
 
 [Unit]
 Description=lsdong deamon
