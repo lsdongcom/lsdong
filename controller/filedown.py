@@ -98,6 +98,7 @@ class FileDownHandler(BaseHandler):
         fileindex = int(self.input_default('i'))
         filetype = self.input_default('t')
         actiontype = self.input_default('a')
+        fileviewname = self.input_default('n')
         password = str(self.input_default('p', None)).strip()
         deep_number = self.get_deep_number(user)
         userdata = self.get_user_data(user, deep_number)
@@ -107,10 +108,10 @@ class FileDownHandler(BaseHandler):
             if (item[1] == filetype):
                 data.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
 
-        if (fileindex > len(data)):
+        if (fileindex >= len(data)):
             ret = {'result': 'error'}
             ret['code'] = '1';
-            ret['info'] = '参数异常'
+            ret['info'] = '参数异常，请重新打开网站后再试'
             self.write(json.dumps(ret))
             return
 
@@ -119,6 +120,14 @@ class FileDownHandler(BaseHandler):
         filehash = selectitem[3]
         passwordhash = selectitem[4]
         savename = selectitem[5]
+
+        if fileviewname != filename:
+            ret = {'result': 'error'}
+            ret['code'] = '1';
+            ret['info'] = '文件编号与文件名不一致，请重新打开网站后再试'
+            self.write(json.dumps(ret))
+            return
+
         keyhash = crypto_helper.get_key(password, user.id, filehash, None, False)
 
         sessionkey = userpay.getSessionKey(user.id, fileindex, filetype, filename)
