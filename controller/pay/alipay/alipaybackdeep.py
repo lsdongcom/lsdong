@@ -72,7 +72,7 @@ class AlipayBackDeepHandler(BaseHandler):
             self.redirect(url)
             return
 
-        if(not file_helper.deep_auth_check(userid, code)):
+        if (file_helper.deep_auth_check(userid, code) is False):
             file_helper.deep_auth_create(userid, code)
 
         url = '/filedepth?k=0'

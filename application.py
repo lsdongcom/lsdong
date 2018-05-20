@@ -27,8 +27,8 @@ def main():
 	options.parse_command_line()
 	logging.info('The template path:{0}'.format(setting['template_path']))
 	logging.info('The static path:{0}'.format(setting['static_path']))
-	print("the lsdong run in the port:{0}".format(options.port))
-	print("you can stop the programming by 'ctrl+c'")
+	logging.info("the lsdong run in the port:{0}".format(options.port))
+	logging.info("you can stop the programming by 'ctrl+c'")
 	application.listen(options.port)
 	tornado.ioloop.IOLoop.current().start()
 

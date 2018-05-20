@@ -28,7 +28,6 @@ class AlipayNotifyDeepHandler(BaseHandler):
 
     def paycheck(self, userid, code, bodyhash):
         self.write("success")
-
         out_trade_no = self.input_default('out_trade_no', None)
         if (not out_trade_no):
             return
@@ -46,19 +45,19 @@ class AlipayNotifyDeepHandler(BaseHandler):
         if alipay.query(out_trade_no) is False:
             return
 
-        timestamp = self.input_default('timestamp')
+        timestamp = self.input_default('gmt_payment')
         amount = self.input_default('total_amount')
-        if(not timestamp or not amount):
+        if (not timestamp or not amount):
             return
-        timeout = datetime.now() - datetime.strptime(timestamp,'%Y-%m-%d %H:%M:%S')
-        if (timeout > timedelta(minutes=30) ):
+        timeout = datetime.now() - datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
+        if (timeout > timedelta(hours=2)):
             return
 
         bodyhashconfim = crypto_helper.get_key(amount, userid, code, out_trade_no)
         if (bodyhash != bodyhashconfim):
             return
 
-        if(not file_helper.deep_auth_check(userid, code)):
+        if (file_helper.deep_auth_check(userid, code) is False):
             file_helper.deep_auth_create(userid, code)
 
 
