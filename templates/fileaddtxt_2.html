@@ -181,6 +181,7 @@
 <script src="{{static_url("assets/vendors/wysiwyg/bootstrap-wysihtml5.js")}}"></script>
 <script src="{{static_url("assets/js/spark-md5.js")}}"></script>
 <script>
+    var storagename = '{{ storageid }}{{ filetype }}';
     $(function() { $('.textarea').wysihtml5(); });
     toastr.options=
     {
@@ -295,6 +296,7 @@
                                 },
                success: function (data) {
                      if(data.result == "ok"){
+                           clearStorage();
                            toastr.success('文本上传成功');
                            setTimeout("location.href='/filelist?t={{ filetype }}';", 2000);
                      }
@@ -312,5 +314,25 @@
                }
          });
     }
+    function updateStorage(){
+        // Check browser support
+        if (typeof(Storage) !== "undefined") {
+            localStorage.setItem(storagename, $("#txtInput").val());
+        }
+    }
+    function clearStorage(){
+        // Check browser support
+        if (typeof(Storage) !== "undefined") {
+            localStorage.setItem(storagename, '');
+        }
+    }
+    function initStorage(){
+        // Check browser support
+        if (typeof(Storage) !== "undefined") {
+            $("#txtInput").val(localStorage.getItem(storagename));
+            setInterval(updateStorage, 30000);
+        }
+    }
+    initStorage();
 </script>
 {% end %}

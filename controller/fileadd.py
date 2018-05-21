@@ -30,7 +30,10 @@ class FileAddHandler(BaseHandler):
         if filetype:
             filetypename = getfiletypename(int(filetype))
             if istxt:
-                self.render('fileaddtxt_' + filetype + '.html', username=user.nickname, filetype=filetype,
+                deep_number = self.get_deep_number(user)
+                storageid = ''.join(list(user.id)[0:32])
+                storageid = '%s%s' % (storageid, deep_number)
+                self.render('fileaddtxt_' + filetype + '.html', username=user.nickname, storageid=storageid, filetype=filetype,
                             filetypename=filetypename, site_notify=site_notify, siteinfo=siteinfo)
             else:
                 self.render('fileadd_' + filetype + '.html', username=user.nickname, filetype=filetype, filetypename=filetypename,
