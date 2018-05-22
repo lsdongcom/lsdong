@@ -35,11 +35,57 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
                     <li><a href="{{ siteinfo['onlineservice_url'] }}" target="_blank">客服在线</a></li>
+                    {% if username %}
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user"></i> {{ username }} <i class="caret"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/logout?c=1">完全退出</a>
+                            </li>
+                            <li>
+                                <a href="/logout">退出</a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li><a href="#" onclick="showLogin()">立即登录</a></li>
+                    {% end %}
                 </ul>
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
     </nav>
+    <div id="div_broswer_warning" style="text-align:center;display:none">
+        <p align="center" style="margin-top: -10px;color:red;font-size: 26px;">
+            你正在使用的浏览器版本过低，将不能正常浏览和使用老树洞安全存储，且存在安全隐患，<br>推荐使用
+            <a target="_blank" href="https://www.microsoft.com/zh-cn/download/internet-explorer.aspx">IE10</a>
+            以上版本、<a target="_blank" href="https://www.google.com/chrome/">google chrome</a>或
+            <a target="_blank" href="https://www.firefox.com.cn/">firefox</a>
+            最新版本。
+        </p>
+    </div>
+    <div id="login_container" style="text-align:center;display:none">
+    </div>
+    <script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+    <script>
+        var obj = new WxLogin({
+                id:"login_container",
+                appid: "{{ data['appid'] }}",
+                scope: "snsapi_login",
+                redirect_uri: "{{ returnurl }}",
+                state: "",
+                style: "",
+                href: ""
+            });
+    </script>
+    <style>
+        a.protocol:link{color: #000000 ; text-decoration:none;} /*常规时候的样式*/
+        a.protocol:visited{color: #000000; text-decoration:none;} /*鼠标指上去的样式*/
+        a.protocol:hover {color: #000000; text-decoration:underline;} /*访问过后的样式*/
+    </style>
     <!-- Main component for a primary marketing message or call to action -->
+    <div style="text-align:center;display:none" id="protocol_container"><p>使用前请阅读:<u><a class="protocol" href="/help/protocol.html" >老树洞安全存储服务协议</a></p></u></div>
     <div class="jumbotron">
         <h2>老树洞安全存储——免费、开源、全程加密、离散存储</h2>
         <p>
@@ -114,5 +160,17 @@
     </div>
 
 </div> <!-- /container -->
-
+{% end %}
+{% block RenderBodyFoot %}
+<script>
+        var abc = getBroswer();
+        if(abc.broswer.toLowerCase() == 'ie' && parseFloat(abc.version) < 10){
+            $("#div_broswer_warning").show();
+            $("#login_container").hide();
+        }
+        function showLogin(){
+            $("#login_container").show();
+            $("#protocol_container").show();
+        }
+</script>
 {% end %}

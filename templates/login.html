@@ -35,6 +35,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li style="display:none"><a href="tel:000-000-0000">热线电话：000-000-0000</a></li>
                     <li><a href="{{ siteinfo['onlineservice_url'] }}" target="_blank">客服在线</a></li>
+                    <li><a href="#" onclick="showLogin()">立即登录</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
@@ -53,7 +54,7 @@
             最新版本。
         </p>
     </div>
-    <div id="login_container" style="text-align:center">
+    <div id="login_container" style="text-align:center;display:none">
     </div>
     <script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
     <script>
@@ -73,7 +74,7 @@
         a.protocol:hover {color: #000000; text-decoration:underline;} /*访问过后的样式*/
     </style>
     <!-- Main component for a primary marketing message or call to action -->
-    <div style="text-align:center"><p>使用前请阅读:<u><a class="protocol" href="/help/protocol.html" >老树洞安全存储服务协议</a></p></u></div>
+    <div style="text-align:center;display:none" id="protocol_container"><p>使用前请阅读:<u><a class="protocol" href="/help/protocol.html" >老树洞安全存储服务协议</a></p></u></div>
     <div class="jumbotron">
         <h2>老树洞——安全存储您的秘密、资料和数字资产</h2>
         <p>
@@ -105,6 +106,10 @@
         if(abc.broswer.toLowerCase() == 'ie' && parseFloat(abc.version) < 10){
             $("#div_broswer_warning").show();
             $("#login_container").hide();
+        }
+        function showLogin(){
+            $("#login_container").show();
+            $("#protocol_container").show();
         }
 </script>
 {% end %}
